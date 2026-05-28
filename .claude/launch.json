@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "wecompound",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "web-agency-system/wecompound"],
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}
