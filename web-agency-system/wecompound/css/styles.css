@@ -686,7 +686,192 @@ textarea:focus {
 }
 
 /* ------------------------------------------------------------
-   16. Responsive Breakpoints
+   16. Preloader
+   ------------------------------------------------------------ */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--canvas);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.preloader.is-done {
+  transform: translateY(-100%);
+}
+.preloader__wordmark {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  opacity: 0;
+  animation: preloaderFade 1s ease forwards;
+}
+.preloader__wordmark span {
+  color: var(--primary);
+}
+@keyframes preloaderFade {
+  0% { opacity: 0; transform: translateY(10px); }
+  50% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 1; }
+}
+
+/* ------------------------------------------------------------
+   17. Hero
+   ------------------------------------------------------------ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 64px;
+  overflow: hidden;
+}
+.hero__vanta {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+.hero__title {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-lg);
+}
+.hero__title .word {
+  display: inline-block;
+}
+.hero__sub {
+  font-size: var(--text-lg);
+  color: var(--ink-muted);
+  line-height: 1.5;
+  margin-bottom: var(--space-xl);
+  max-width: 600px;
+}
+.hero__actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+/* ------------------------------------------------------------
+   18. Bento Grid (Services Overview)
+   ------------------------------------------------------------ */
+.services-overview {
+  padding-block: var(--space-section);
+}
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+.bento-grid__item--wide {
+  grid-column: span 2;
+}
+
+/* ------------------------------------------------------------
+   19. Stats Strip
+   ------------------------------------------------------------ */
+.stats-strip {
+  padding-block: var(--space-2xl);
+  background: var(--surface-1);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+}
+.stats-strip__grid {
+  display: flex;
+  justify-content: center;
+  gap: clamp(3rem, 8vw, 7.5rem);
+  flex-wrap: wrap;
+}
+.stat {
+  text-align: center;
+}
+.stat__number {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.stat__suffix {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.03em;
+}
+.stat__label {
+  display: block;
+  margin-top: var(--space-xs);
+  color: var(--ink-subtle);
+  font-size: var(--text-sm);
+}
+
+/* ------------------------------------------------------------
+   20. Featured Work
+   ------------------------------------------------------------ */
+.featured-work {
+  padding-block: var(--space-section);
+}
+.work-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  grid-template-rows: auto auto;
+  gap: var(--space-md);
+}
+.work-card {
+  display: block;
+  text-decoration: none;
+  color: var(--ink);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.work-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--hairline-strong);
+}
+.work-card--large {
+  grid-row: span 2;
+}
+.work-card__thumb {
+  aspect-ratio: 16 / 10;
+  background: var(--surface-2);
+}
+.work-card--large .work-card__thumb {
+  aspect-ratio: 16 / 14;
+}
+.work-card__info {
+  padding: var(--space-lg);
+}
+.work-card__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+.work-card__result {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+/* ------------------------------------------------------------
+   21. Responsive Breakpoints
    ------------------------------------------------------------ */
 
 /* Mobile — up to 767px */
@@ -719,6 +904,15 @@ textarea:focus {
   body {
     padding-bottom: 60px;
   }
+
+  .bento-grid { grid-template-columns: 1fr; }
+  .bento-grid__item--wide { grid-column: span 1; }
+  .work-grid { grid-template-columns: 1fr; }
+  .work-card--large { grid-row: span 1; }
+  .hero__title { font-size: var(--text-2xl); }
+  .hero__content { padding-top: var(--space-2xl); }
+  .hero__actions { flex-direction: column; gap: var(--space-sm); }
+  .hero__actions .btn-primary, .hero__actions .btn-secondary { width: 100%; text-align: center; }
 }
 
 /* Tablet — 768px to 1023px */
@@ -727,4 +921,6 @@ textarea:focus {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-lg);
   }
+
+  .bento-grid { grid-template-columns: repeat(2, 1fr); }
 }
