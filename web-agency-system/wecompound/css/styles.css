@@ -401,12 +401,12 @@ textarea:focus {
 }
 
 .nav__link:hover,
-.nav__link.active {
+.nav__link--active {
   color: var(--ink);
 }
 
 .nav__link:hover::after,
-.nav__link.active::after {
+.nav__link--active::after {
   width: 100%;
 }
 
