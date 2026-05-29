@@ -374,11 +374,9 @@ textarea:focus {
 }
 .logo-o {
   display: inline-block;
+  width: 0.6em;
+  text-align: center;
   font-variant-numeric: tabular-nums;
-}
-.logo-o.is-digit {
-  font-size: 0.6em;
-  vertical-align: baseline;
 }
 
 .nav__links {
