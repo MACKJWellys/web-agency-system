@@ -27,13 +27,13 @@ function initPreloader() {
 function runCounterAnimation(preloader, counter) {
   var cursor = preloader.querySelector('.preloader__cursor');
 
-  // Phase 1: 3 cursor blinks (500ms each = 1.5s), then type 0 and count
+  // 3 cursor blinks (1.5s), then start counting from 1
   setTimeout(function() {
-    counter.textContent = '0';
+    counter.textContent = '1';
     if (cursor) cursor.remove();
 
-    // Phase A: 0→10 over 1.1s (slow, deliberate)
-    // Phase B: 10→999,999 over 1.0s (explosive)
+    // Phase A: 1→10 over 1.1s (slow, deliberate)
+    // Phase B: 10→1,000,000 over 1.0s (explosive)
     var phaseA = 1100;
     var phaseB = 1000;
     var start = performance.now();
@@ -45,10 +45,10 @@ function runCounterAnimation(preloader, counter) {
 
       if (elapsed < phaseA) {
         var p = elapsed / phaseA;
-        value = Math.floor(10 * Math.pow(p, 2.5));
+        value = Math.max(1, Math.floor(1 + 9 * Math.pow(p, 2.5)));
       } else if (elapsed < phaseA + phaseB) {
         var p = (elapsed - phaseA) / phaseB;
-        value = Math.floor(10 + 999989 * Math.pow(p, 5));
+        value = Math.floor(10 + 999990 * Math.pow(p, 5));
       } else {
         counter.textContent = 'Compound';
         setTimeout(function() { dismissPreloader(preloader); }, 300);
