@@ -513,15 +513,18 @@ function initLogoOSpin() {
   function spinO(el) {
     var digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     var i = 0;
-    var speed = 60; // ms per digit
+    var speed = 60;
 
+    el.classList.add('is-digit');
     var interval = setInterval(function() {
       el.textContent = digits[i];
       i++;
       if (i >= digits.length) {
         clearInterval(interval);
-        // Brief hold on 9, then back to 'o'
-        setTimeout(function() { el.textContent = 'o'; }, 80);
+        setTimeout(function() {
+          el.textContent = 'o';
+          el.classList.remove('is-digit');
+        }, 80);
       }
     }, speed);
   }

@@ -375,7 +375,9 @@ textarea:focus {
 .logo-o {
   display: inline-block;
   font-variant-numeric: tabular-nums;
-  font-size: 0.85em;
+}
+.logo-o.is-digit {
+  font-size: 0.6em;
   vertical-align: baseline;
 }
 
