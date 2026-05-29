@@ -374,15 +374,15 @@ textarea:focus {
 }
 .logo-o {
   display: inline-block;
-  width: 0.6em;
+  width: 0.62em;
   text-align: center;
   font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  line-height: inherit;
 }
 .logo-o.is-digit {
   font-size: 0.72em;
-  line-height: 1;
-  vertical-align: baseline;
-  transform: translateY(-0.04em);
+  font-weight: 800;
 }
 
 .nav__links {
