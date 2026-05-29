@@ -7,21 +7,37 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ========== PRELOADER ========== */
 function initPreloader() {
   const preloader = document.querySelector('.preloader');
-  if (!preloader) { initApp(); return; }
+  if (!preloader) { onReady(); return; }
 
-  // Start Vanta behind preloader (non-blocking — don't wait for window load)
-  initVanta();
+  // Wait for window load (all scripts ready), then dismiss fast
+  window.addEventListener('load', () => {
+    initVanta();
+    // Brief preloader hold — scripts are guaranteed loaded at this point
+    setTimeout(() => {
+      preloader.classList.add('is-done');
+      preloader.addEventListener('transitionend', () => {
+        preloader.remove();
+      }, { once: true });
+      setTimeout(() => { if (document.contains(preloader)) preloader.remove(); }, 600);
+      onReady();
+    }, 400);
+  });
 
-  // Dismiss quickly — don't wait for all resources
+  // Failsafe: if window load takes too long (>4s), dismiss anyway
   setTimeout(() => {
-    preloader.classList.add('is-done');
-    preloader.addEventListener('transitionend', () => {
-      preloader.remove();
-    }, { once: true });
-    // Fallback if transitionend doesn't fire
-    setTimeout(() => { if (document.contains(preloader)) preloader.remove(); }, 600);
-    initApp();
-  }, 600);
+    if (document.contains(preloader)) {
+      preloader.classList.add('is-done');
+      setTimeout(() => { if (document.contains(preloader)) preloader.remove(); }, 600);
+      onReady();
+    }
+  }, 4000);
+}
+
+var __appStarted = false;
+function onReady() {
+  if (__appStarted) return;
+  __appStarted = true;
+  initApp();
 }
 
 function initApp() {
@@ -45,7 +61,7 @@ function initApp() {
         el.style.transform = 'none';
       }
     });
-  }, 3000);
+  }, 1500);
 }
 
 /* ========== LENIS SMOOTH SCROLL ========== */
