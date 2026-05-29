@@ -551,8 +551,8 @@ function initLogoOSpin() {
       spinO(oSpans[1]);
     }, secondDelay);
 
-    // Schedule next cycle: 8-12s from now
-    var nextCycle = 8000 + Math.random() * 4000;
+    // Schedule next cycle: 10-20s from now
+    var nextCycle = 10000 + Math.random() * 10000;
     setTimeout(triggerCycle, nextCycle);
   }
 
