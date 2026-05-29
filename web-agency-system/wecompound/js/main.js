@@ -25,54 +25,61 @@ function initPreloader() {
 }
 
 function runCounterAnimation(preloader, counter) {
-  // Milestones: count through each digit length rapidly
-  // 0→9, 10→99, 100→999, ..., up to 9999999 then → "Compound"
-  var milestones = [
-    { from: 0, to: 9, duration: 150 },
-    { from: 10, to: 99, duration: 150 },
-    { from: 100, to: 999, duration: 180 },
-    { from: 1000, to: 9999, duration: 200 },
-    { from: 10000, to: 99999, duration: 180 },
-    { from: 100000, to: 999999, duration: 150 },
-    { from: 1000000, to: 9999999, duration: 200 },
-  ];
+  var cursor = preloader.querySelector('.preloader__cursor');
 
-  var milestoneIdx = 0;
+  // Phase 1: cursor blinks alone for a beat, then "types" the 0
+  setTimeout(function() {
+    counter.textContent = '0';
 
-  function runMilestone() {
-    if (milestoneIdx >= milestones.length) {
-      // Finished counting — morph to "Compound"
-      counter.textContent = 'Compound';
-      counter.style.minWidth = 'auto';
-      // Brief hold on the finished wordmark, then dismiss
-      setTimeout(function() { dismissPreloader(preloader); }, 350);
-      return;
-    }
+    // Phase 2: count up with exponential speed increase
+    // Each milestone gets faster — slow start, explosive finish
+    setTimeout(function() {
+      var milestones = [
+        { from: 0, to: 9, duration: 300 },
+        { from: 10, to: 99, duration: 250 },
+        { from: 100, to: 999, duration: 200 },
+        { from: 1000, to: 9999, duration: 150 },
+        { from: 10000, to: 99999, duration: 100 },
+        { from: 100000, to: 999999, duration: 70 },
+        { from: 1000000, to: 9999999, duration: 50 },
+      ];
 
-    var m = milestones[milestoneIdx];
-    var start = performance.now();
+      var milestoneIdx = 0;
 
-    function tick(now) {
-      var elapsed = now - start;
-      var progress = Math.min(elapsed / m.duration, 1);
-      // Ease out for snappy feel
-      var eased = 1 - Math.pow(1 - progress, 2);
-      var value = Math.floor(m.from + (m.to - m.from) * eased);
-      counter.textContent = value.toLocaleString();
+      function runMilestone() {
+        if (milestoneIdx >= milestones.length) {
+          // Kill cursor, show "Compound"
+          if (cursor) cursor.remove();
+          counter.textContent = 'Compound';
+          setTimeout(function() { dismissPreloader(preloader); }, 300);
+          return;
+        }
 
-      if (progress < 1) {
+        var m = milestones[milestoneIdx];
+        var start = performance.now();
+
+        function tick(now) {
+          var elapsed = now - start;
+          var progress = Math.min(elapsed / m.duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var value = Math.floor(m.from + (m.to - m.from) * eased);
+          counter.textContent = value.toLocaleString();
+
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            counter.textContent = m.to.toLocaleString();
+            milestoneIdx++;
+            runMilestone();
+          }
+        }
+
         requestAnimationFrame(tick);
-      } else {
-        counter.textContent = m.to.toLocaleString();
-        milestoneIdx++;
-        runMilestone();
       }
-    }
 
-    requestAnimationFrame(tick);
-  }
-
-  runMilestone();
+      runMilestone();
+    }, 100);
+  }, 500);
 }
 
 function dismissPreloader(preloader) {
