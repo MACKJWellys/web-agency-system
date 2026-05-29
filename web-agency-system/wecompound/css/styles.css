@@ -375,6 +375,8 @@ textarea:focus {
 .logo-o {
   display: inline-block;
   font-variant-numeric: tabular-nums;
+  font-size: 0.85em;
+  vertical-align: baseline;
 }
 
 .nav__links {
