@@ -105,16 +105,16 @@ function initGSAP() {
     const words = text.split(' ');
     heroTitle.innerHTML = words.map(w => '<span class="word" style="display:inline-block">' + w + '</span>').join(' ');
 
-    gsap.to('.hero__title .word', {
-      opacity: 1, y: 0, duration: 0.6, stagger: 0.03, ease: 'power2.out', delay: 0.2,
+    gsap.to('.hero .eyebrow', {
+      opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', delay: 0,
     });
 
-    gsap.to('.hero .eyebrow', {
-      opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 0,
+    gsap.to('.hero__title .word', {
+      opacity: 1, y: 0, duration: 0.5, stagger: 0.04, ease: 'power2.out', delay: 0.15,
     });
 
     gsap.to('.hero__sub, .hero__actions', {
-      opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.8,
+      opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', delay: 0.6,
     });
   }
 

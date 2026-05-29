@@ -750,9 +750,13 @@ textarea:focus {
   max-width: 800px;
 }
 .hero .eyebrow,
-.hero__title,
 .hero__sub,
 .hero__actions {
+  opacity: 0;
+  transform: translateY(20px);
+}
+/* Title words are hidden individually by GSAP — parent stays visible */
+.hero__title .word {
   opacity: 0;
   transform: translateY(20px);
 }
