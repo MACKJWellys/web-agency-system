@@ -27,7 +27,14 @@ function initPreloader() {
 function runCounterAnimation(preloader, counter) {
   var cursor = preloader.querySelector('.preloader__cursor');
 
-  // 2 cursor blinks (1s), then start counting from 1
+  // 2 cursor blinks (1s) + 0.5s hold with cursor visible, then start counting
+  if (cursor) {
+    // Stop blinking and hold cursor visible for the last 0.5s
+    setTimeout(function() {
+      cursor.style.animation = 'none';
+      cursor.style.opacity = '1';
+    }, 1000);
+  }
   setTimeout(function() {
     counter.textContent = '1';
     if (cursor) cursor.remove();
@@ -63,7 +70,7 @@ function runCounterAnimation(preloader, counter) {
     }
 
     requestAnimationFrame(tick);
-  }, 1000);
+  }, 1500);
 }
 
 function dismissPreloader(preloader) {
@@ -508,6 +515,12 @@ function initLogoOSpin() {
 
   var oSpans = logo.querySelectorAll('.logo-o');
   if (oSpans.length < 2) return;
+
+  // Lock each 'o' span to its exact measured width so digits never shift surrounding letters
+  oSpans.forEach(function(span) {
+    var w = span.getBoundingClientRect().width;
+    span.style.width = w + 'px';
+  });
 
   function spinO(el) {
     var digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];

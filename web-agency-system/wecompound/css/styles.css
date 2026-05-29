@@ -373,11 +373,14 @@ textarea:focus {
   color: var(--primary);
 }
 .logo-o {
-  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  text-align: center;
+  vertical-align: baseline;
 }
 .logo-o.is-digit {
   font-size: 0.7em;
   font-weight: 900;
+  -webkit-text-stroke: 0.4px currentColor;
 }
 
 .nav__links {
