@@ -4,26 +4,40 @@ document.addEventListener('DOMContentLoaded', () => {
   initPreloader();
 });
 
-/* ========== PRELOADER ========== */
+/* ========== PRELOADER — Compounding Spheres ========== */
 function initPreloader() {
   const preloader = document.querySelector('.preloader');
   if (!preloader) { initApp(); return; }
 
+  // Start Vanta BEHIND the preloader immediately so there's no flash on dismiss
   window.addEventListener('load', () => {
-    setTimeout(() => {
-      preloader.classList.add('is-done');
-      preloader.addEventListener('transitionend', () => {
-        preloader.remove();
-        initApp();
-      }, { once: true });
-    }, 1500);
+    initVanta();
+    runPreloaderAnimation(preloader);
   });
+}
+
+function runPreloaderAnimation(preloader) {
+  // Simple wordmark preloader — hold for a beat then dismiss
+  setTimeout(() => {
+    dismissPreloader(preloader);
+  }, 1200);
+}
+
+function dismissPreloader(preloader) {
+  preloader.classList.add('is-done');
+  preloader.addEventListener('transitionend', () => {
+    preloader.remove();
+    initApp();
+  }, { once: true });
+  // Fallback if transitionend doesn't fire
+  setTimeout(() => { if (document.contains(preloader)) { preloader.remove(); initApp(); } }, 800);
 }
 
 function initApp() {
   initLenis();
   initGSAP();
-  initVanta();
+  // Vanta already initialized in preloader phase — skip if already running
+  if (!window.__vantaEffect) initVanta();
   initBarba();
   initMobileMenu();
   initStickyCta();
