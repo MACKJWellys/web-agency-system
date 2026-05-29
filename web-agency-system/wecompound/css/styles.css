@@ -812,6 +812,97 @@ textarea:focus {
 }
 
 /* ------------------------------------------------------------
+   17b. Founder Profile
+   ------------------------------------------------------------ */
+.founder {
+  padding-block: var(--space-section);
+}
+
+.founder__inner {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.founder__image-wrap {
+  position: relative;
+  width: clamp(260px, 28vw, 400px);
+  aspect-ratio: 6 / 7;
+}
+
+/* Decorative green accent frame — offset behind the photo */
+.founder__frame {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--primary);
+  border-radius: 6px;
+  transform: translate(14px, 14px);
+  z-index: 0;
+}
+
+.founder__photo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  z-index: 1;
+  background: var(--surface-2);
+}
+
+.founder__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.founder__content {
+  max-width: 540px;
+}
+
+.founder__name {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 1.4rem + 2vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-top: var(--space-sm);
+}
+
+.founder__role {
+  font-size: var(--text-lg);
+  color: var(--primary);
+  font-weight: 500;
+  margin-top: var(--space-xs);
+}
+
+.founder__bio {
+  font-size: var(--text-base);
+  color: var(--ink-muted);
+  line-height: 1.7;
+  margin-top: var(--space-md);
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+  .founder__inner {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+  .founder__image-wrap {
+    width: clamp(220px, 60vw, 320px);
+  }
+  .founder__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ------------------------------------------------------------
    18. Bento Grid (Services Overview)
    ------------------------------------------------------------ */
 .services-overview {

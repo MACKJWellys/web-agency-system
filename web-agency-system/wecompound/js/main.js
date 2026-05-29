@@ -178,11 +178,11 @@ function initGSAP() {
 
   // Section entrance animations
   const sections = document.querySelectorAll(
-    '.services-overview, .stats-strip, .featured-work, .cta-banner, .service-detail, .contact-section, .portfolio-section'
+    '.founder, .services-overview, .stats-strip, .featured-work, .cta-banner, .service-detail, .contact-section, .portfolio-section'
   );
 
   sections.forEach(section => {
-    const children = section.querySelectorAll('.container > *, .service-detail__inner > *, .contact-grid > *, .cta-banner__inner > *');
+    const children = section.querySelectorAll('.container > *, .founder__inner > *, .service-detail__inner > *, .contact-grid > *, .cta-banner__inner > *');
     if (children.length === 0) return;
 
     gsap.from(children, {
