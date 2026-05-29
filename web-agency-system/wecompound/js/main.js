@@ -27,50 +27,43 @@ function initPreloader() {
 function runCounterAnimation(preloader, counter) {
   var cursor = preloader.querySelector('.preloader__cursor');
 
-  // Phase 1: cursor blinks alone, then "types" 0
+  // Phase 1: 3 cursor blinks (500ms each = 1.5s), then type 0 and count
   setTimeout(function() {
     counter.textContent = '0';
+    if (cursor) cursor.remove();
 
-    // Phase 2: remove cursor, then smooth exponential count
-    setTimeout(function() {
-      if (cursor) cursor.remove();
+    // Phase A: 0→10 over 1.1s (slow, deliberate)
+    // Phase B: 10→999,999 over 1.0s (explosive)
+    var phaseA = 1100;
+    var phaseB = 1000;
+    var start = performance.now();
+    var lastDisplay = -1;
 
-      // Two phases:
-      // Phase A: 0→10 over 1.1s (slow, deliberate, ease-in)
-      // Phase B: 10→9,999,999 over 1.1s (explosive ease-in)
-      var phaseA = 1100;
-      var phaseB = 1100;
-      var start = performance.now();
-      var lastDisplay = -1;
+    function tick(now) {
+      var elapsed = now - start;
+      var value;
 
-      function tick(now) {
-        var elapsed = now - start;
-        var value;
-
-        if (elapsed < phaseA) {
-          // Phase A: 0→10, ease-in so it accelerates gently
-          var p = elapsed / phaseA;
-          value = Math.floor(10 * Math.pow(p, 2.5));
-        } else if (elapsed < phaseA + phaseB) {
-          // Phase B: 10→9,999,999, steep ease-in for explosion
-          var p = (elapsed - phaseA) / phaseB;
-          value = Math.floor(10 + 9999989 * Math.pow(p, 5));
-        } else {
-          counter.textContent = 'Compound';
-          setTimeout(function() { dismissPreloader(preloader); }, 300);
-          return;
-        }
-
-        if (value !== lastDisplay) {
-          counter.textContent = value.toLocaleString();
-          lastDisplay = value;
-        }
-        requestAnimationFrame(tick);
+      if (elapsed < phaseA) {
+        var p = elapsed / phaseA;
+        value = Math.floor(10 * Math.pow(p, 2.5));
+      } else if (elapsed < phaseA + phaseB) {
+        var p = (elapsed - phaseA) / phaseB;
+        value = Math.floor(10 + 999989 * Math.pow(p, 5));
+      } else {
+        counter.textContent = 'Compound';
+        setTimeout(function() { dismissPreloader(preloader); }, 300);
+        return;
       }
 
+      if (value !== lastDisplay) {
+        counter.textContent = value.toLocaleString();
+        lastDisplay = value;
+      }
       requestAnimationFrame(tick);
-    }, 200);
-  }, 600);
+    }
+
+    requestAnimationFrame(tick);
+  }, 1500);
 }
 
 function dismissPreloader(preloader) {
