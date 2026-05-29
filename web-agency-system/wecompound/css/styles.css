@@ -749,6 +749,13 @@ textarea:focus {
   z-index: 1;
   max-width: 800px;
 }
+.hero .eyebrow,
+.hero__title,
+.hero__sub,
+.hero__actions {
+  opacity: 0;
+  transform: translateY(20px);
+}
 .hero__title {
   font-size: var(--text-3xl);
   font-weight: 700;
@@ -884,6 +891,12 @@ textarea:focus {
 /* ------------------------------------------------------------
    21. Page Hero (non-home pages)
    ------------------------------------------------------------ */
+.page-hero .eyebrow,
+.page-hero__title,
+.page-hero__sub {
+  opacity: 0;
+  transform: translateY(30px);
+}
 .page-hero {
   padding-top: calc(64px + var(--space-section));
   padding-bottom: var(--space-2xl);
