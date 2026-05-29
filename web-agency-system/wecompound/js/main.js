@@ -4,33 +4,84 @@ document.addEventListener('DOMContentLoaded', () => {
   initPreloader();
 });
 
-/* ========== PRELOADER ========== */
+/* ========== PRELOADER — Counter Animation ========== */
 function initPreloader() {
   const preloader = document.querySelector('.preloader');
   if (!preloader) { onReady(); return; }
 
-  // Wait for window load (all scripts ready), then dismiss fast
+  const counter = preloader.querySelector('.preloader__counter');
+
+  // Wait for window load so GSAP is ready, then run counter
   window.addEventListener('load', () => {
     initVanta();
-    // Brief preloader hold — scripts are guaranteed loaded at this point
-    setTimeout(() => {
-      preloader.classList.add('is-done');
-      preloader.addEventListener('transitionend', () => {
-        preloader.remove();
-      }, { once: true });
-      setTimeout(() => { if (document.contains(preloader)) preloader.remove(); }, 600);
-      onReady();
-    }, 400);
+    if (counter) runCounterAnimation(preloader, counter);
+    else dismissPreloader(preloader);
   });
 
-  // Failsafe: if window load takes too long (>4s), dismiss anyway
+  // Failsafe if window load takes too long
   setTimeout(() => {
-    if (document.contains(preloader)) {
-      preloader.classList.add('is-done');
-      setTimeout(() => { if (document.contains(preloader)) preloader.remove(); }, 600);
-      onReady();
-    }
+    if (document.contains(preloader)) dismissPreloader(preloader);
   }, 4000);
+}
+
+function runCounterAnimation(preloader, counter) {
+  // Milestones: count through each digit length rapidly
+  // 0→9, 10→99, 100→999, ..., up to 9999999 then → "Compound"
+  var milestones = [
+    { from: 0, to: 9, duration: 150 },
+    { from: 10, to: 99, duration: 150 },
+    { from: 100, to: 999, duration: 180 },
+    { from: 1000, to: 9999, duration: 200 },
+    { from: 10000, to: 99999, duration: 180 },
+    { from: 100000, to: 999999, duration: 150 },
+    { from: 1000000, to: 9999999, duration: 200 },
+  ];
+
+  var milestoneIdx = 0;
+
+  function runMilestone() {
+    if (milestoneIdx >= milestones.length) {
+      // Finished counting — morph to "Compound"
+      counter.textContent = 'Compound';
+      counter.style.minWidth = 'auto';
+      // Brief hold on the finished wordmark, then dismiss
+      setTimeout(function() { dismissPreloader(preloader); }, 350);
+      return;
+    }
+
+    var m = milestones[milestoneIdx];
+    var start = performance.now();
+
+    function tick(now) {
+      var elapsed = now - start;
+      var progress = Math.min(elapsed / m.duration, 1);
+      // Ease out for snappy feel
+      var eased = 1 - Math.pow(1 - progress, 2);
+      var value = Math.floor(m.from + (m.to - m.from) * eased);
+      counter.textContent = value.toLocaleString();
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        counter.textContent = m.to.toLocaleString();
+        milestoneIdx++;
+        runMilestone();
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  runMilestone();
+}
+
+function dismissPreloader(preloader) {
+  preloader.classList.add('is-done');
+  preloader.addEventListener('transitionend', function() {
+    preloader.remove();
+  }, { once: true });
+  setTimeout(function() { if (document.contains(preloader)) preloader.remove(); }, 600);
+  onReady();
 }
 
 var __appStarted = false;

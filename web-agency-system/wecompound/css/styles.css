@@ -710,8 +710,12 @@ textarea:focus {
   opacity: 0;
   animation: preloaderFade 1s ease forwards;
 }
-.preloader__wordmark span {
+.preloader__counter {
   color: var(--primary);
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  min-width: 4.5ch;
+  text-align: left;
 }
 @keyframes preloaderFade {
   0% { opacity: 0; transform: translateY(10px); }
