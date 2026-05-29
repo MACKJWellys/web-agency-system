@@ -45,8 +45,8 @@ function runCounterAnimation(preloader, counter) {
         var elapsed = now - start;
         var progress = Math.min(elapsed / duration, 1);
 
-        // Exponential ease-in: starts crawling, ends blazing
-        var eased = Math.pow(progress, 3.5);
+        // Steep exponential ease-in: half the time is 0-1000, rest explodes
+        var eased = Math.pow(progress, 6);
         var value = Math.floor(target * eased);
         counter.textContent = value.toLocaleString();
 
