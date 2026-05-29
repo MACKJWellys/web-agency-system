@@ -378,6 +378,12 @@ textarea:focus {
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
+.logo-o.is-digit {
+  font-size: 0.72em;
+  line-height: 1;
+  vertical-align: baseline;
+  transform: translateY(-0.04em);
+}
 
 .nav__links {
   display: flex;

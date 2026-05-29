@@ -514,12 +514,16 @@ function initLogoOSpin() {
     var i = 0;
     var speed = 60;
 
+    el.classList.add('is-digit');
     var interval = setInterval(function() {
       el.textContent = digits[i];
       i++;
       if (i >= digits.length) {
         clearInterval(interval);
-        setTimeout(function() { el.textContent = 'o'; }, 80);
+        setTimeout(function() {
+          el.textContent = 'o';
+          el.classList.remove('is-digit');
+        }, 80);
       }
     }, speed);
   }
