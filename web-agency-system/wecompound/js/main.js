@@ -45,6 +45,16 @@ function initApp() {
   initProjectPanels();
   initDynamicYear();
   initScrollToTop();
+
+  // Safety net: force hero elements visible if GSAP animations stall
+  setTimeout(() => {
+    document.querySelectorAll('.hero__title, .hero__title .word, .hero .eyebrow, .hero__sub, .hero__actions, .page-hero .eyebrow, .page-hero__title, .page-hero__sub').forEach(el => {
+      if (getComputedStyle(el).opacity === '0') {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      }
+    });
+  }, 3000);
 }
 
 /* ========== LENIS SMOOTH SCROLL ========== */
@@ -88,43 +98,29 @@ function initGSAP() {
     const words = text.split(' ');
     heroTitle.innerHTML = words.map(w => '<span class="word" style="display:inline-block">' + w + '</span>').join(' ');
 
-    gsap.from('.hero__title .word', {
-      opacity: 0,
-      y: 20,
-      duration: 0.6,
-      stagger: 0.03,
-      ease: 'power2.out',
-      delay: 0.2,
-    });
+    gsap.fromTo('.hero__title .word',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.03, ease: 'power2.out', delay: 0.2, clearProps: 'transform' }
+    );
 
-    gsap.from('.hero .eyebrow', {
-      opacity: 0,
-      y: 15,
-      duration: 0.6,
-      ease: 'power2.out',
-      delay: 0,
-    });
+    gsap.fromTo('.hero .eyebrow',
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', delay: 0, clearProps: 'transform' }
+    );
 
-    gsap.from('.hero__sub, .hero__actions', {
-      opacity: 0,
-      y: 20,
-      duration: 0.8,
-      ease: 'power2.out',
-      delay: 0.8,
-    });
+    gsap.fromTo('.hero__sub, .hero__actions',
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 0.8, clearProps: 'transform' }
+    );
   }
 
   // Page hero fade-in (non-home pages: services, work, contact)
   const pageHero = document.querySelector('.page-hero');
   if (pageHero) {
-    gsap.from('.page-hero .eyebrow, .page-hero__title, .page-hero__sub', {
-      opacity: 0,
-      y: 30,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: 'power2.out',
-      delay: 0.1,
-    });
+    gsap.fromTo('.page-hero .eyebrow, .page-hero__title, .page-hero__sub',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power2.out', delay: 0.1, clearProps: 'transform' }
+    );
   }
 
   // Section entrance animations
