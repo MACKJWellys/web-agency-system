@@ -35,31 +35,37 @@ function runCounterAnimation(preloader, counter) {
     setTimeout(function() {
       if (cursor) cursor.remove();
 
-      // 0 to 9,999,999 over ~2.2s
-      // pow(10) curve: first 1s is just 0→~10, last 0.5s explodes to millions
-      var target = 9999999;
-      var duration = 2200;
+      // Two phases:
+      // Phase A: 0→10 over 1.1s (slow, deliberate, ease-in)
+      // Phase B: 10→9,999,999 over 1.1s (explosive ease-in)
+      var phaseA = 1100;
+      var phaseB = 1100;
       var start = performance.now();
       var lastDisplay = -1;
 
       function tick(now) {
         var elapsed = now - start;
-        var progress = Math.min(elapsed / duration, 1);
+        var value;
 
-        var eased = Math.pow(progress, 10);
-        var value = Math.floor(target * eased);
-        // Only update DOM when the displayed number actually changes
+        if (elapsed < phaseA) {
+          // Phase A: 0→10, ease-in so it accelerates gently
+          var p = elapsed / phaseA;
+          value = Math.floor(10 * Math.pow(p, 2.5));
+        } else if (elapsed < phaseA + phaseB) {
+          // Phase B: 10→9,999,999, steep ease-in for explosion
+          var p = (elapsed - phaseA) / phaseB;
+          value = Math.floor(10 + 9999989 * Math.pow(p, 5));
+        } else {
+          counter.textContent = 'Compound';
+          setTimeout(function() { dismissPreloader(preloader); }, 300);
+          return;
+        }
+
         if (value !== lastDisplay) {
           counter.textContent = value.toLocaleString();
           lastDisplay = value;
         }
-
-        if (progress < 1) {
-          requestAnimationFrame(tick);
-        } else {
-          counter.textContent = 'Compound';
-          setTimeout(function() { dismissPreloader(preloader); }, 300);
-        }
+        requestAnimationFrame(tick);
       }
 
       requestAnimationFrame(tick);
