@@ -35,20 +35,24 @@ function runCounterAnimation(preloader, counter) {
     setTimeout(function() {
       if (cursor) cursor.remove();
 
-      // Single continuous animation — 0 to 9,999,999 over ~1.7s
-      // Using exponential easing so it starts slow and accelerates
+      // 0 to 9,999,999 over ~2.2s
+      // pow(10) curve: first 1s is just 0→~10, last 0.5s explodes to millions
       var target = 9999999;
-      var duration = 1700;
+      var duration = 2200;
       var start = performance.now();
+      var lastDisplay = -1;
 
       function tick(now) {
         var elapsed = now - start;
         var progress = Math.min(elapsed / duration, 1);
 
-        // Steep exponential ease-in: half the time is 0-1000, rest explodes
-        var eased = Math.pow(progress, 6);
+        var eased = Math.pow(progress, 10);
         var value = Math.floor(target * eased);
-        counter.textContent = value.toLocaleString();
+        // Only update DOM when the displayed number actually changes
+        if (value !== lastDisplay) {
+          counter.textContent = value.toLocaleString();
+          lastDisplay = value;
+        }
 
         if (progress < 1) {
           requestAnimationFrame(tick);
