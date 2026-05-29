@@ -27,7 +27,7 @@ function initPreloader() {
 function runCounterAnimation(preloader, counter) {
   var cursor = preloader.querySelector('.preloader__cursor');
 
-  // 3 cursor blinks (1.5s), then start counting from 1
+  // 2 cursor blinks (1s), then start counting from 1
   setTimeout(function() {
     counter.textContent = '1';
     if (cursor) cursor.remove();
@@ -63,7 +63,7 @@ function runCounterAnimation(preloader, counter) {
     }
 
     requestAnimationFrame(tick);
-  }, 1500);
+  }, 1000);
 }
 
 function dismissPreloader(preloader) {
