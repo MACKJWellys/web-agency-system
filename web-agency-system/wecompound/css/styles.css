@@ -994,6 +994,9 @@ textarea:focus {
   margin-bottom: var(--space-xl);
 }
 .project-card {
+  display: block;
+  text-decoration: none;
+  color: var(--ink);
   background: var(--surface-1);
   border: 1px solid var(--hairline);
   border-radius: var(--radius-xl);
