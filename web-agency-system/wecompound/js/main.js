@@ -546,7 +546,7 @@ function initLogoOSpin() {
     spinO(oSpans[0]);
 
     // Spin second 'o' 0.5-1s later
-    var secondDelay = 500 + Math.random() * 500;
+    var secondDelay = 100 + Math.random() * 900;
     setTimeout(function() {
       spinO(oSpans[1]);
     }, secondDelay);
