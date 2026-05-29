@@ -4,33 +4,24 @@ document.addEventListener('DOMContentLoaded', () => {
   initPreloader();
 });
 
-/* ========== PRELOADER — Compounding Spheres ========== */
+/* ========== PRELOADER ========== */
 function initPreloader() {
   const preloader = document.querySelector('.preloader');
   if (!preloader) { initApp(); return; }
 
-  // Start Vanta BEHIND the preloader immediately so there's no flash on dismiss
-  window.addEventListener('load', () => {
-    initVanta();
-    runPreloaderAnimation(preloader);
-  });
-}
+  // Start Vanta behind preloader (non-blocking — don't wait for window load)
+  initVanta();
 
-function runPreloaderAnimation(preloader) {
-  // Simple wordmark preloader — hold for a beat then dismiss
+  // Dismiss quickly — don't wait for all resources
   setTimeout(() => {
-    dismissPreloader(preloader);
-  }, 1200);
-}
-
-function dismissPreloader(preloader) {
-  preloader.classList.add('is-done');
-  preloader.addEventListener('transitionend', () => {
-    preloader.remove();
+    preloader.classList.add('is-done');
+    preloader.addEventListener('transitionend', () => {
+      preloader.remove();
+    }, { once: true });
+    // Fallback if transitionend doesn't fire
+    setTimeout(() => { if (document.contains(preloader)) preloader.remove(); }, 600);
     initApp();
-  }, { once: true });
-  // Fallback if transitionend doesn't fire
-  setTimeout(() => { if (document.contains(preloader)) { preloader.remove(); initApp(); } }, 800);
+  }, 600);
 }
 
 function initApp() {
