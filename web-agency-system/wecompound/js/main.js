@@ -27,59 +27,40 @@ function initPreloader() {
 function runCounterAnimation(preloader, counter) {
   var cursor = preloader.querySelector('.preloader__cursor');
 
-  // Phase 1: cursor blinks alone for a beat, then "types" the 0
+  // Phase 1: cursor blinks alone, then "types" 0
   setTimeout(function() {
     counter.textContent = '0';
 
-    // Phase 2: count up with exponential speed increase
-    // Each milestone gets faster — slow start, explosive finish
+    // Phase 2: remove cursor, then smooth exponential count
     setTimeout(function() {
-      var milestones = [
-        { from: 0, to: 9, duration: 300 },
-        { from: 10, to: 99, duration: 250 },
-        { from: 100, to: 999, duration: 200 },
-        { from: 1000, to: 9999, duration: 150 },
-        { from: 10000, to: 99999, duration: 100 },
-        { from: 100000, to: 999999, duration: 70 },
-        { from: 1000000, to: 9999999, duration: 50 },
-      ];
+      if (cursor) cursor.remove();
 
-      var milestoneIdx = 0;
+      // Single continuous animation — 0 to 9,999,999 over ~1.7s
+      // Using exponential easing so it starts slow and accelerates
+      var target = 9999999;
+      var duration = 1700;
+      var start = performance.now();
 
-      function runMilestone() {
-        if (milestoneIdx >= milestones.length) {
-          // Kill cursor, show "Compound"
-          if (cursor) cursor.remove();
+      function tick(now) {
+        var elapsed = now - start;
+        var progress = Math.min(elapsed / duration, 1);
+
+        // Exponential ease-in: starts crawling, ends blazing
+        var eased = Math.pow(progress, 3.5);
+        var value = Math.floor(target * eased);
+        counter.textContent = value.toLocaleString();
+
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
           counter.textContent = 'Compound';
           setTimeout(function() { dismissPreloader(preloader); }, 300);
-          return;
         }
-
-        var m = milestones[milestoneIdx];
-        var start = performance.now();
-
-        function tick(now) {
-          var elapsed = now - start;
-          var progress = Math.min(elapsed / m.duration, 1);
-          var eased = 1 - Math.pow(1 - progress, 3);
-          var value = Math.floor(m.from + (m.to - m.from) * eased);
-          counter.textContent = value.toLocaleString();
-
-          if (progress < 1) {
-            requestAnimationFrame(tick);
-          } else {
-            counter.textContent = m.to.toLocaleString();
-            milestoneIdx++;
-            runMilestone();
-          }
-        }
-
-        requestAnimationFrame(tick);
       }
 
-      runMilestone();
-    }, 100);
-  }, 500);
+      requestAnimationFrame(tick);
+    }, 200);
+  }, 600);
 }
 
 function dismissPreloader(preloader) {
