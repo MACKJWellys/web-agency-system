@@ -91,6 +91,7 @@ function initApp() {
   initProjectPanels();
   initDynamicYear();
   initScrollToTop();
+  initLogoOSpin();
 
   // Safety net: force hero elements visible if GSAP animations stall
   setTimeout(() => {
@@ -490,4 +491,52 @@ function initScrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
+}
+
+/* ========== LOGO 'O' DIGIT SPIN ========== */
+function initLogoOSpin() {
+  var logo = document.querySelector('.nav__logo span');
+  if (!logo) return;
+
+  // Wrap the two 'o's in Compound with spans
+  logo.innerHTML = logo.textContent.replace(/o/g, function(match, offset) {
+    return '<span class="logo-o" data-o="true">o</span>';
+  });
+
+  var oSpans = logo.querySelectorAll('.logo-o');
+  if (oSpans.length < 2) return;
+
+  function spinO(el) {
+    var digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    var i = 0;
+    var speed = 60; // ms per digit
+
+    var interval = setInterval(function() {
+      el.textContent = digits[i];
+      i++;
+      if (i >= digits.length) {
+        clearInterval(interval);
+        // Brief hold on 9, then back to 'o'
+        setTimeout(function() { el.textContent = 'o'; }, 80);
+      }
+    }, speed);
+  }
+
+  function triggerCycle() {
+    // Spin first 'o'
+    spinO(oSpans[0]);
+
+    // Spin second 'o' 0.5-1s later
+    var secondDelay = 500 + Math.random() * 500;
+    setTimeout(function() {
+      spinO(oSpans[1]);
+    }, secondDelay);
+
+    // Schedule next cycle: 3-5s from now (with variance)
+    var nextCycle = 3000 + Math.random() * 2000;
+    setTimeout(triggerCycle, nextCycle);
+  }
+
+  // Start first cycle after a short delay
+  setTimeout(triggerCycle, 2000);
 }

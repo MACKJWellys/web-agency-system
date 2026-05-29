@@ -372,6 +372,10 @@ textarea:focus {
 .nav__logo span {
   color: var(--primary);
 }
+.logo-o {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
 
 .nav__links {
   display: flex;
