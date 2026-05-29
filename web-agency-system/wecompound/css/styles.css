@@ -1100,6 +1100,13 @@ textarea:focus {
   border: 1px solid var(--hairline);
   border-radius: var(--radius-xl);
 }
+.service-detail__img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--hairline);
+}
 .service-detail--featured {
   background: var(--surface-1);
   border-top: 2px solid var(--primary);
