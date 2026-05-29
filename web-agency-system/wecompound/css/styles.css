@@ -380,7 +380,7 @@ textarea:focus {
 .logo-o.is-digit {
   font-size: 0.7em;
   font-weight: 900;
-  -webkit-text-stroke: 0.4px currentColor;
+  -webkit-text-stroke: 0.7px currentColor;
 }
 
 .nav__links {
