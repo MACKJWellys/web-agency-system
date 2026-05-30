@@ -262,6 +262,11 @@ function initGSAP() {
         }, scrambleSpeed);
       }
 
+      // Lock width to prevent layout shift during scramble
+      var paidWidth = paidEl.getBoundingClientRect().width;
+      paidEl.style.width = paidWidth + 'px';
+      paidEl.style.overflow = 'hidden';
+
       // Start rotation after hero reveals
       startRotation();
 
