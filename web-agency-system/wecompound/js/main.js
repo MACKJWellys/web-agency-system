@@ -187,27 +187,30 @@ function initGSAP() {
       opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', delay: 0.6,
     });
 
-    // "paid" currency scramble
-    // Starts as €£$¥ (no period). After hero reveals, linger, scramble, then "paid."
+    // "paid" currency scramble — fast blitz then snap to "paid."
     var paidEl = document.querySelector('.hero-paid');
     if (paidEl) {
-      var currencySets = ['$€¥£', '¥$£€', '£¥€$'];
-      var cycleDuration = 1200;
-      var interval = cycleDuration / currencySets.length;
+      var symbols = ['€','£','$','¥','₩','₿','₹','₽','¢','₣'];
+      var blitzInterval = 60;  // ms per swap — very fast
+      var blitzDuration = 1000; // total blitz time
 
-      // Hero title last word visible ~0.65s after initGSAP, plus 0.5s linger
       setTimeout(function() {
-        var i = 0;
+        var elapsed = 0;
         var scramble = setInterval(function() {
-          if (i >= currencySets.length) {
+          elapsed += blitzInterval;
+          if (elapsed >= blitzDuration) {
             clearInterval(scramble);
             paidEl.textContent = 'paid.';
-            paidEl.style.letterSpacing = ''; // reset tighter spacing for symbols
+            paidEl.style.letterSpacing = '';
             return;
           }
-          paidEl.textContent = currencySets[i];
-          i++;
-        }, interval);
+          // Random 4-symbol combo each tick
+          var combo = '';
+          for (var j = 0; j < 4; j++) {
+            combo += symbols[Math.floor(Math.random() * symbols.length)];
+          }
+          paidEl.textContent = combo;
+        }, blitzInterval);
       }, 1150);
     }
   }
