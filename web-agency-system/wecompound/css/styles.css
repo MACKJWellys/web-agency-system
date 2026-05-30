@@ -158,6 +158,10 @@ section {
   display: inline-block;
   min-width: 2ch;
   vertical-align: top;
+  height: 1em;
+  height: 1lh;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 /* Compound counter word animation */
