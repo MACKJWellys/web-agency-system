@@ -187,29 +187,37 @@ function initGSAP() {
       opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', delay: 0.6,
     });
 
-    // "paid" currency scramble — fast blitz then snap to "paid."
+    // "paid" currency scramble — blitz with letters locking in one by one
     var paidEl = document.querySelector('.hero-paid');
     if (paidEl) {
       var symbols = ['€','£','$','¥'];
-      var blitzInterval = 60;  // ms per swap — very fast
-      var blitzDuration = 1000; // total blitz time
+      var target = 'paid';
+      var blitzInterval = 60;
+      var lockInterval = 250; // ms between each letter locking in
+      var initialScramble = 200; // pure scramble before first lock
 
       setTimeout(function() {
         var elapsed = 0;
+        var locked = 0; // how many letters of "paid" are locked
         var scramble = setInterval(function() {
           elapsed += blitzInterval;
-          if (elapsed >= blitzDuration) {
+          // Check if next letter should lock
+          if (elapsed >= initialScramble + locked * lockInterval && locked < target.length) {
+            locked++;
+          }
+          // All locked — done
+          if (locked >= target.length) {
             clearInterval(scramble);
-            paidEl.textContent = 'paid.';
+            paidEl.textContent = target + '.';
             paidEl.style.letterSpacing = '';
             return;
           }
-          // Random 4-symbol combo each tick
-          var combo = '';
-          for (var j = 0; j < 4; j++) {
-            combo += symbols[Math.floor(Math.random() * symbols.length)];
+          // Build string: locked letters + scrambled remainder
+          var display = target.substring(0, locked);
+          for (var j = locked; j < 4; j++) {
+            display += symbols[Math.floor(Math.random() * symbols.length)];
           }
-          paidEl.textContent = combo;
+          paidEl.textContent = display;
         }, blitzInterval);
       }, 1150);
     }
