@@ -48,10 +48,13 @@ function runCounterAnimation(preloader, counter) {
     counter.textContent = '1';
     if (cursor) cursor.remove();
 
-    // Phase A: 1→10 over 733ms (snappy, deliberate — 1.5x faster)
-    // Phase B: 10→1,000,000 over 1.0s (explosive)
+    // Phase A: 1→10 over 733ms (snappy, deliberate)
+    // Phase B1: 10→~500k over 500ms (building)
+    // Phase B2: ~500k→1,000,000 over 250ms (burst — saves 250ms)
+    // Compound lingers 550ms (300 + 250 saved)
     var phaseA = 733;
-    var phaseB = 1000;
+    var phaseB1 = 500;
+    var phaseB2 = 250;
     var start = performance.now();
     var lastDisplay = -1;
 
@@ -62,23 +65,27 @@ function runCounterAnimation(preloader, counter) {
       if (elapsed < phaseA) {
         var p = elapsed / phaseA;
         value = Math.max(1, Math.floor(1 + 9 * Math.pow(p, 2.5)));
-      } else if (elapsed < phaseA + phaseB) {
-        var p = (elapsed - phaseA) / phaseB;
-        value = Math.floor(10 + 999990 * Math.pow(p, 5));
+      } else if (elapsed < phaseA + phaseB1) {
+        // First half of explosive phase: 10 → ~500,000
+        var p = (elapsed - phaseA) / phaseB1;
+        value = Math.floor(10 + 499990 * Math.pow(p, 5));
+      } else if (elapsed < phaseA + phaseB1 + phaseB2) {
+        // Second half: ~500,000 → 1,000,000 (much faster)
+        var p = (elapsed - phaseA - phaseB1) / phaseB2;
+        value = Math.floor(500000 + 500000 * Math.pow(p, 3));
       } else {
         counter.textContent = 'Compound';
         preloaderAnimationDone = true;
-        // Only dismiss if window has loaded (so GSAP/Vanta are ready)
+        // Linger on "Compound" — saved time added here
         setTimeout(function() {
           if (windowLoaded) {
             dismissPreloader(preloader);
           } else {
-            // Window hasn't loaded yet — wait for it
             window.addEventListener('load', function() {
               dismissPreloader(preloader);
             });
           }
-        }, 300);
+        }, 550);
         return;
       }
 
