@@ -164,9 +164,16 @@ function initGSAP() {
   // Hero word-by-word reveal (home page only)
   const heroTitle = document.querySelector('.hero__title');
   if (heroTitle) {
-    const text = heroTitle.textContent;
-    const words = text.split(' ');
-    heroTitle.innerHTML = words.map(w => '<span class="word" style="display:inline-block">' + w + '</span>').join(' ');
+    // Preserve .hero-paid span during word split
+    var text = heroTitle.textContent;
+    var words = text.split(/\s+/).filter(Boolean);
+    heroTitle.innerHTML = words.map(function(w) {
+      if (/[€£$¥]/.test(w)) {
+        var clean = w.replace(/\./g, '');
+        return '<span class="word" style="display:inline-block"><span class="hero-paid">' + clean + '</span></span>';
+      }
+      return '<span class="word" style="display:inline-block">' + w + '</span>';
+    }).join(' ');
 
     gsap.to('.hero .eyebrow', {
       opacity: 1, y: 0, duration: 0.4, ease: 'power2.out', delay: 0,
@@ -181,7 +188,7 @@ function initGSAP() {
     });
 
     // "paid" currency scramble
-    // Starts as €£$¥ in HTML. After hero reveals, linger 0.5s, scramble, then "paid"
+    // Starts as €£$¥ (no period). After hero reveals, linger, scramble, then "paid."
     var paidEl = document.querySelector('.hero-paid');
     if (paidEl) {
       var currencySets = ['$€¥£', '¥$£€', '£¥€$'];
@@ -194,13 +201,14 @@ function initGSAP() {
         var scramble = setInterval(function() {
           if (i >= currencySets.length) {
             clearInterval(scramble);
-            paidEl.textContent = 'paid';
+            paidEl.textContent = 'paid.';
+            paidEl.style.letterSpacing = ''; // reset tighter spacing for symbols
             return;
           }
           paidEl.textContent = currencySets[i];
           i++;
         }, interval);
-      }, 1150); // ~0.65s hero reveal + 0.5s linger
+      }, 1150);
     }
   }
 
