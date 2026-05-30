@@ -182,9 +182,8 @@ function initGSAP() {
     var text = heroTitle.textContent;
     var words = text.split(/\s+/).filter(Boolean);
     heroTitle.innerHTML = words.map(function(w) {
-      if (/[€£$¥]/.test(w)) {
-        var clean = w.replace(/\./g, '');
-        return '<span class="word" style="display:inline-block"><span class="hero-paid">' + clean + '</span></span>';
+      if (/^paid/.test(w)) {
+        return '<span class="word" style="display:inline-block"><span class="hero-paid">' + w + '</span></span>';
       }
       return '<span class="word" style="display:inline-block">' + w + '</span>';
     }).join(' ');
@@ -263,50 +262,8 @@ function initGSAP() {
         }, scrambleSpeed);
       }
 
-      // Unified wave: build €£$¥ while resolving to "paid" — overlapping
-      // When 3rd symbol ($) appears, 1st position (€) starts resolving to P, etc.
-      setTimeout(function() {
-        var tgtSym = ['€','£','$','¥'];
-        var tgtLtr = ['p','a','i','d'];
-        var S = 4; // ticks per stagger step
-
-        // Timeline per position: [buildStart, buildLock, resolveStart, resolveLock]
-        var timeline = [
-          { bs: -99, bl: -99, rs: 1*S, rl: 2*S }, // pos 0: € already visible
-          { bs: 0,   bl: 1*S, rs: 2*S, rl: 3*S }, // pos 1: £
-          { bs: 1*S, bl: 2*S, rs: 3*S, rl: 4*S }, // pos 2: $
-          { bs: 2*S, bl: 3*S, rs: 4*S, rl: 5*S }, // pos 3: ¥
-        ];
-        var totalTicks = 5 * S;
-        var tick = 0;
-
-        var anim = setInterval(function() {
-          tick++;
-          if (tick >= totalTicks) {
-            clearInterval(anim);
-            paidEl.textContent = 'paid.';
-            paidEl.style.letterSpacing = '';
-            startRotation();
-            return;
-          }
-          var display = '';
-          for (var i = 0; i < 4; i++) {
-            var t = timeline[i];
-            if (tick >= t.rl) {
-              display += tgtLtr[i];
-            } else if (tick >= t.rs) {
-              display += symbols[Math.floor(Math.random() * symbols.length)];
-            } else if (tick >= t.bl) {
-              display += tgtSym[i];
-            } else if (tick >= t.bs && tick < t.bl) {
-              display += symbols[Math.floor(Math.random() * symbols.length)];
-            } else if (i === 0) {
-              display += '€';
-            }
-          }
-          paidEl.textContent = display;
-        }, scrambleSpeed);
-      }, 2400); // ~0.65s hero reveal + 1.75s linger
+      // Start rotation after hero reveals
+      startRotation();
 
       function startRotation() {
         var currentIndex = 0; // currently showing words[0] = "paid"

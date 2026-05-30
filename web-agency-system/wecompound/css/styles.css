@@ -157,7 +157,6 @@ section {
 .hero-paid {
   display: inline-block;
   min-width: 2ch;
-  letter-spacing: -0.08em;
 }
 
 /* Compound counter word animation */
