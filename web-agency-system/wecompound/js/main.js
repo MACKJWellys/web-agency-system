@@ -5,23 +5,26 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ========== PRELOADER — Counter Animation ========== */
+var preloaderAnimationDone = false;
+var windowLoaded = false;
+
 function initPreloader() {
   const preloader = document.querySelector('.preloader');
   if (!preloader) { onReady(); return; }
 
   const counter = preloader.querySelector('.preloader__counter');
 
-  // Wait for window load so GSAP is ready, then run counter
+  // Init Vanta as soon as window loads (independent of animation)
   window.addEventListener('load', () => {
+    windowLoaded = true;
     initVanta();
-    if (counter) runCounterAnimation(preloader, counter);
-    else dismissPreloader(preloader);
+    // If animation already finished while waiting for load, dismiss now
+    if (preloaderAnimationDone) dismissPreloader(preloader);
   });
 
-  // Failsafe if window load takes too long
-  setTimeout(() => {
-    if (document.contains(preloader)) dismissPreloader(preloader);
-  }, 4000);
+  // Start the counter animation immediately — don't wait for window.load
+  if (counter) runCounterAnimation(preloader, counter);
+  else dismissPreloader(preloader);
 }
 
 function runCounterAnimation(preloader, counter) {
@@ -29,7 +32,6 @@ function runCounterAnimation(preloader, counter) {
 
   // 2 cursor blinks (1s) + 0.5s hold with cursor visible, then start counting
   if (cursor) {
-    // Stop blinking and hold cursor visible for the last 0.5s
     setTimeout(function() {
       cursor.style.animation = 'none';
       cursor.style.opacity = '1';
@@ -39,9 +41,9 @@ function runCounterAnimation(preloader, counter) {
     counter.textContent = '1';
     if (cursor) cursor.remove();
 
-    // Phase A: 1→10 over 1.1s (slow, deliberate)
+    // Phase A: 1→10 over 733ms (snappy, deliberate — 1.5x faster)
     // Phase B: 10→1,000,000 over 1.0s (explosive)
-    var phaseA = 1100;
+    var phaseA = 733;
     var phaseB = 1000;
     var start = performance.now();
     var lastDisplay = -1;
@@ -58,7 +60,18 @@ function runCounterAnimation(preloader, counter) {
         value = Math.floor(10 + 999990 * Math.pow(p, 5));
       } else {
         counter.textContent = 'Compound';
-        setTimeout(function() { dismissPreloader(preloader); }, 300);
+        preloaderAnimationDone = true;
+        // Only dismiss if window has loaded (so GSAP/Vanta are ready)
+        setTimeout(function() {
+          if (windowLoaded) {
+            dismissPreloader(preloader);
+          } else {
+            // Window hasn't loaded yet — wait for it
+            window.addEventListener('load', function() {
+              dismissPreloader(preloader);
+            });
+          }
+        }, 300);
         return;
       }
 
