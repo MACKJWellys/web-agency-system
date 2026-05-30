@@ -129,6 +129,7 @@ function initApp() {
   initDynamicYear();
   initScrollToTop();
   initLogoOSpin();
+  initCtaAscii();
 
   // Safety net: force hero elements visible if GSAP animations stall
   setTimeout(() => {
@@ -240,6 +241,11 @@ function initGSAP() {
             } else {
               paidEl.textContent = toWord + '.';
             }
+            // Update width lock to fit new word
+            if (wordSpan) {
+              wordSpan.style.width = 'auto';
+              wordSpan.style.width = wordSpan.getBoundingClientRect().width + 'px';
+            }
             if (onComplete) onComplete();
             return;
           }
@@ -321,29 +327,32 @@ function initGSAP() {
       });
     });
 
-    // Mini bar chart animation (scroll-driven, hockey-stick growth)
-    var chart = document.querySelector('.mini-chart');
-    if (chart) {
-      var bars = chart.querySelectorAll('.mini-chart__bar');
-      var vH = 52; // viewBox height
-      // Exponential growth: small, medium, tall, explosive
+    // Mini bar chart animation with echo delay effect
+    var allCharts = document.querySelectorAll('.mini-chart');
+    if (allCharts.length) {
+      var vH = 52;
       var targets = [8, 14, 26, 48];
+      var echoDelays = [0, 0.15, 0.28, 0.39, 0.48];
 
       ScrollTrigger.create({
-        trigger: chart,
+        trigger: allCharts[0],
         start: 'top 82%',
         end: 'top 62%',
         scrub: 0.2,
         onUpdate: function(self) {
           var p = self.progress;
-          // Apply easeOutBack curve for a satisfying pop
-          var ep = p < 1 ? 1 - Math.pow(1 - p, 3) : 1;
-          bars.forEach(function(bar, i) {
-            var stagger = i * 0.12;
-            var bp = Math.max(0, Math.min(1, (ep - stagger) / (1 - stagger)));
-            var h = targets[i] * bp;
-            bar.setAttribute('height', h);
-            bar.setAttribute('y', vH - h);
+          allCharts.forEach(function(chart, ci) {
+            var delay = echoDelays[ci] || 0;
+            var dp = Math.max(0, (p - delay) / (1 - delay));
+            var ep = dp < 1 ? 1 - Math.pow(1 - dp, 3) : 1;
+            var bars = chart.querySelectorAll('.mini-chart__bar');
+            bars.forEach(function(bar, i) {
+              var stagger = i * 0.12;
+              var bp = Math.max(0, Math.min(1, (ep - stagger) / (1 - stagger)));
+              var h = targets[i] * bp;
+              bar.setAttribute('height', h);
+              bar.setAttribute('y', vH - h);
+            });
           });
         },
       });
@@ -448,19 +457,45 @@ function initGSAP() {
     const children = section.querySelectorAll('.container > *, .founder__inner > *, .service-detail__inner > *, .contact-grid > *, .cta-banner__inner > *');
     if (children.length === 0) return;
 
-    gsap.from(children, {
-      scrollTrigger: {
+    if (section.classList.contains('cta-banner')) {
+      // CTA is near page bottom — use onEnter callback to guarantee it fires
+      gsap.set(children, { opacity: 0, y: 40 });
+      ScrollTrigger.create({
         trigger: section,
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      },
-      opacity: 0,
-      y: 40,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: 'power2.out',
-    });
+        start: 'top 98%',
+        once: true,
+        onEnter: () => {
+          gsap.to(children, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power2.out' });
+        },
+      });
+    } else {
+      gsap.from(children, {
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power2.out',
+      });
+    }
   });
+
+  // Tooth glint — fires once when founder section is visible
+  const glint = document.querySelector('.tooth-glint');
+  if (glint) {
+    ScrollTrigger.create({
+      trigger: '.founder',
+      start: 'top 60%',
+      once: true,
+      onEnter: () => {
+        setTimeout(() => glint.classList.add('is-active'), 1500);
+      },
+    });
+  }
 
   // Card stagger animations
   const cardGroups = document.querySelectorAll('.bento-grid, .work-grid, .project-grid');
@@ -678,15 +713,39 @@ function initCountUp() {
 
 function animateCounter(el, target) {
   const duration = 1500;
+  const fadeOut = 600;
   const start = performance.now();
+  const stat = el.closest('.stat');
+  const numEl = el;
+  const suffixEl = stat ? stat.querySelector('.stat__suffix') : null;
+
+  function setGlow(intensity) {
+    var shadow = intensity > 0
+      ? '0 0 ' + (12 * intensity) + 'px var(--primary), 0 0 ' + (24 * intensity) + 'px rgba(34,197,94,' + (0.3 * intensity) + ')'
+      : 'none';
+    numEl.style.textShadow = shadow;
+    if (suffixEl) suffixEl.style.textShadow = shadow;
+  }
 
   function update(now) {
     const elapsed = now - start;
     const progress = Math.min(elapsed / duration, 1);
-    // Ease out cubic
     const eased = 1 - Math.pow(1 - progress, 3);
     el.textContent = Math.floor(eased * target);
-    if (progress < 1) requestAnimationFrame(update);
+    // Glow ramps up with progress
+    setGlow(progress);
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      // Fade glow back to 0
+      var fadeStart = performance.now();
+      function fadeGlow(now) {
+        var fp = Math.min((now - fadeStart) / fadeOut, 1);
+        setGlow(1 - fp);
+        if (fp < 1) requestAnimationFrame(fadeGlow);
+      }
+      requestAnimationFrame(fadeGlow);
+    }
   }
 
   requestAnimationFrame(update);
@@ -828,4 +887,104 @@ function initLogoOSpin() {
 
   // Start first cycle after a short delay
   setTimeout(triggerCycle, 2000);
+}
+
+/* ========== CTA ASCII ENERGY FIELD ========== */
+function initCtaAscii() {
+  var canvas = document.querySelector('.cta-ascii');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var section = canvas.closest('.cta-banner');
+
+  var chars = ['$','€','£','%','↑','+','×','·','▲','⬆','∞'];
+  var cols, rows, fontSize = 14;
+  var particles = [];
+  var animId;
+
+  function resize() {
+    var rect = section.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    cols = Math.floor(canvas.width / fontSize);
+    rows = Math.floor(canvas.height / fontSize);
+  }
+
+  function spawnParticle() {
+    particles.push({
+      x: Math.random() * cols | 0,
+      y: rows + Math.random() * 4,
+      speed: 0.2 + Math.random() * 0.5,
+      char: chars[Math.random() * chars.length | 0]
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fontSize + 'px monospace';
+    ctx.textAlign = 'center';
+
+    for (var i = particles.length - 1; i >= 0; i--) {
+      var p = particles[i];
+      p.y -= p.speed * 0.12;
+      var yPct = 1 - (p.y / rows);
+
+      var fade;
+      if (yPct < 0.05) {
+        fade = yPct / 0.05;
+      } else if (yPct < 0.4) {
+        fade = 1;
+      } else if (yPct < 0.93) {
+        fade = 1 - ((yPct - 0.4) / 0.53);
+      } else {
+        fade = 0;
+      }
+
+      if (p.y < 0 || fade <= 0) {
+        particles.splice(i, 1);
+        continue;
+      }
+
+      var r, g, b;
+      if (yPct < 0.7) {
+        var t = yPct / 0.7;
+        r = Math.floor(10 + 24 * t);
+        g = Math.floor(80 + 117 * t);
+        b = Math.floor(20 + 74 * t);
+      } else {
+        var t = Math.min(1, (yPct - 0.7) / 0.23);
+        r = Math.floor(34 + 186 * t);
+        g = Math.floor(197 + 58 * t);
+        b = Math.floor(94 + 136 * t);
+      }
+
+      ctx.globalAlpha = fade * 0.9;
+      ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
+      ctx.fillText(p.char, p.x * fontSize + fontSize / 2, p.y * fontSize);
+
+      if (Math.random() < 0.04) {
+        p.char = chars[Math.random() * chars.length | 0];
+      }
+    }
+
+    ctx.globalAlpha = 1;
+
+    var spawnRate = Math.min(cols * 1.5, 50);
+    for (var s = 0; s < spawnRate; s++) {
+      if (Math.random() < 0.8) spawnParticle();
+    }
+
+    animId = requestAnimationFrame(draw);
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      resize();
+      if (!animId) draw();
+    } else {
+      if (animId) { cancelAnimationFrame(animId); animId = null; }
+    }
+  }, { threshold: 0.1 });
+
+  observer.observe(section);
+  window.addEventListener('resize', resize);
 }

@@ -105,13 +105,14 @@
             <div class="founder__frame"></div>
             <div class="founder__photo">
               <img src="images/founder branded.png" alt="Nick — Founder of WeCompound" width="480" height="560" loading="lazy">
+              <span class="tooth-glint" aria-hidden="true"></span>
             </div>
           </div>
           <div class="founder__content">
             <span class="eyebrow">Meet the founder</span>
             <h2 class="founder__name">Nick</h2>
             <p class="founder__role">Founder &amp; Director</p>
-            <p class="founder__bio">Part creative, part engineer. I started WeCompound because I saw too many businesses paying for websites that didn't make them money. We combine premium media production with real technical execution — AI, SEO, and custom code — so your online presence actually compounds into revenue.</p>
+            <p class="founder__bio">I started WeCompound because I couldn't unsee it: new technology means a small, sharp team can now do what used to take an entire department, and ship in weeks, not quarters. So that's what we do. We get under the hood, actually understand your business, then get to building everything you need to compound online.</p>
             <a href="contact.html" class="btn-primary" style="margin-top: var(--space-lg);">Work with me</a>
           </div>
         </div>
@@ -134,9 +135,9 @@
                 <text x="32" y="98" class="card__deco-text">&lt;div&gt;...&lt;/div&gt;</text>
                 <text x="18" y="114" class="card__deco-text">&lt;/body&gt;</text>
               </svg>
-              <div class="card__icon">
+              <div class="card__icon card__icon--web">
                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="4" y="6" width="40" height="28" rx="3"/><path d="M16 40h16M24 34v6M18 20l4 4-4 4M28 28h6"/>
+                  <rect x="4" y="6" width="40" height="28" rx="3"/><path d="M16 40h16M24 34v6M18 20l4 4-4 4"/><path d="M28 28h6" class="icon-cursor"/>
                 </svg>
               </div>
               <h3 class="card__title">Web Design & Development</h3>
@@ -148,9 +149,12 @@
                 <polyline points="10,100 30,85 50,90 70,60 90,40 110,10" class="card__deco-line card__deco-line--trend" fill="none"/>
                 <circle cx="110" cy="10" r="4" class="card__deco-dot"/>
               </svg>
-              <div class="card__icon">
+              <div class="card__icon card__icon--seo">
                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="20" cy="20" r="14"/><path d="M30 30l10 10M14 22v-6M20 22v-10M26 22v-4"/>
+                  <circle cx="20" cy="20" r="14"/><path d="M30 30l10 10"/>
+                  <rect x="13" y="12" width="2.5" height="11" rx="1" fill="currentColor" stroke="none" class="seo-bar seo-bar--1"/>
+                  <rect x="19" y="12" width="2.5" height="11" rx="1" fill="currentColor" stroke="none" class="seo-bar seo-bar--2"/>
+                  <rect x="25" y="12" width="2.5" height="11" rx="1" fill="currentColor" stroke="none" class="seo-bar seo-bar--3"/>
                 </svg>
               </div>
               <h3 class="card__title">SEO & Visibility</h3>
@@ -193,9 +197,12 @@
                 <path d="M106 40 L115 40 M111 36 L115 40 L111 44" class="card__deco-line card__deco-line--net" fill="none"/>
                 <path d="M106 80 L115 80 M111 76 L115 80 L111 84" class="card__deco-line card__deco-line--net" fill="none"/>
               </svg>
-              <div class="card__icon">
+              <div class="card__icon card__icon--ai">
                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="8" y="8" width="32" height="32" rx="4"/><circle cx="20" cy="22" r="3" fill="currentColor"/><circle cx="28" cy="22" r="3" fill="currentColor"/><path d="M18 30c2 2 4 3 6 3s4-1 6-3"/><path d="M24 4v4M44 24h-4M24 44v-4M4 24h4"/>
+                  <rect x="8" y="8" width="32" height="32" rx="4"/>
+                  <circle cx="20" cy="22" r="3" fill="currentColor" class="ai-eye ai-eye--left"/>
+                  <circle cx="28" cy="22" r="3" fill="currentColor" class="ai-eye ai-eye--right"/>
+                  <path d="M18 30c2 2 4 3 6 3s4-1 6-3"/><path d="M24 4v4M44 24h-4M24 44v-4M4 24h4"/>
                 </svg>
               </div>
               <h3 class="card__title">AI Implementation</h3>
@@ -227,9 +234,11 @@
                 <!-- Play button on thumbnail -->
                 <polygon points="15,98 15,110 24,104" class="card__deco-dot" style="opacity:1"/>
               </svg>
-              <div class="card__icon">
+              <div class="card__icon card__icon--media">
                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M6 16a2 2 0 012-2h6l4-4h12l4 4h6a2 2 0 012 2v20a2 2 0 01-2 2H8a2 2 0 01-2-2V16z"/><circle cx="24" cy="26" r="8"/>
+                  <path d="M6 16a2 2 0 012-2h6l4-4h12l4 4h6a2 2 0 012 2v20a2 2 0 01-2 2H8a2 2 0 01-2-2V16z"/>
+                  <circle cx="24" cy="26" r="8" class="cam-lens"/>
+                  <circle cx="36.75" cy="18" r="2.5" class="cam-rec" fill="currentColor" stroke="none"/>
                 </svg>
               </div>
               <h3 class="card__title">Premium Media Production</h3>
@@ -264,12 +273,38 @@
         <div class="container">
           <span class="eyebrow">Selected work</span>
           <h2 class="section-title section-title--chart">Results, not just websites
-            <svg class="mini-chart" viewBox="0 0 56 52" aria-hidden="true">
-              <rect class="mini-chart__bar" x="2"  y="52" width="9" height="0" rx="1.5"/>
-              <rect class="mini-chart__bar" x="15" y="52" width="9" height="0" rx="1.5"/>
-              <rect class="mini-chart__bar" x="28" y="52" width="9" height="0" rx="1.5"/>
-              <rect class="mini-chart__bar" x="41" y="52" width="9" height="0" rx="1.5"/>
-            </svg>
+            <span class="mini-chart-group">
+              <svg class="mini-chart" viewBox="0 0 56 52" aria-hidden="true">
+                <rect class="mini-chart__bar" x="2"  y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="15" y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="28" y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="41" y="52" width="9" height="0" rx="1.5"/>
+              </svg>
+              <svg class="mini-chart mini-chart--echo" data-echo="1" viewBox="0 0 56 52" aria-hidden="true">
+                <rect class="mini-chart__bar" x="2"  y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="15" y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="28" y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="41" y="52" width="9" height="0" rx="1.5"/>
+              </svg>
+              <svg class="mini-chart mini-chart--echo" data-echo="2" viewBox="0 0 56 52" aria-hidden="true">
+                <rect class="mini-chart__bar" x="2"  y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="15" y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="28" y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="41" y="52" width="9" height="0" rx="1.5"/>
+              </svg>
+              <svg class="mini-chart mini-chart--echo" data-echo="3" viewBox="0 0 56 52" aria-hidden="true">
+                <rect class="mini-chart__bar" x="2"  y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="15" y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="28" y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="41" y="52" width="9" height="0" rx="1.5"/>
+              </svg>
+              <svg class="mini-chart mini-chart--echo" data-echo="4" viewBox="0 0 56 52" aria-hidden="true">
+                <rect class="mini-chart__bar" x="2"  y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="15" y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="28" y="52" width="9" height="0" rx="1.5"/>
+                <rect class="mini-chart__bar" x="41" y="52" width="9" height="0" rx="1.5"/>
+              </svg>
+            </span>
           </h2>
           <div class="work-grid">
             <a href="https://soundsystemhire.ie" target="_blank" rel="noopener" class="work-card work-card--large">
@@ -302,11 +337,12 @@
 
       <!-- CTA BANNER -->
       <section class="cta-banner">
+        <canvas class="cta-ascii" aria-hidden="true"></canvas>
         <div class="container">
           <div class="cta-banner__inner">
             <h2>Ready to compound your growth?</h2>
             <p class="cta-banner__sub">Let's talk about what's holding your business back online.</p>
-            <a href="contact.html" class="btn-primary">Get my free consultation</a>
+            <a href="contact.html" class="btn-primary">Get in touch</a>
           </div>
         </div>
       </section>
