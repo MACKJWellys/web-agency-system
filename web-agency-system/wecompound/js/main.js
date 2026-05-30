@@ -229,28 +229,35 @@ function initGSAP() {
           })(p);
         }
 
-        // Green for "seen", default for "paid"
-        if (toWord === 'seen') {
-          paidEl.style.color = 'var(--primary)';
-        } else {
-          paidEl.style.color = '';
-        }
+        var isGreen = (toWord === 'seen');
 
         var renderInterval = setInterval(function() {
           var allDone = locked[0] && locked[1] && locked[2] && locked[3];
           if (allDone) {
             clearInterval(renderInterval);
-            paidEl.textContent = toWord + '.';
+            if (isGreen) {
+              paidEl.innerHTML = '<span style="color:var(--primary)">' + toWord + '</span>.';
+            } else {
+              paidEl.textContent = toWord + '.';
+              paidEl.style.color = '';
+            }
             if (onComplete) onComplete();
             return;
           }
           var display = '';
           for (var i = 0; i < positions; i++) {
-            if (locked[i]) display += toWord[i];
-            else if (scrambling[i]) display += symbols[Math.floor(Math.random() * symbols.length)];
-            else display += state[i];
+            var ch;
+            if (locked[i]) {
+              ch = toWord[i];
+              if (isGreen) ch = '<span style="color:var(--primary)">' + ch + '</span>';
+            } else if (scrambling[i]) {
+              ch = symbols[Math.floor(Math.random() * symbols.length)];
+            } else {
+              ch = state[i];
+            }
+            display += ch;
           }
-          paidEl.textContent = display;
+          paidEl.innerHTML = display;
         }, scrambleSpeed);
       }
 
@@ -301,14 +308,22 @@ function initGSAP() {
 
       function startRotation() {
         var currentIndex = 0; // currently showing words[0] = "paid"
-        setInterval(function() {
-          var from = words[currentIndex];
-          var nextIndex = (currentIndex + 1) % words.length;
-          var to = words[nextIndex];
-          transitionWord(from, to, function() {
-            currentIndex = nextIndex;
-          });
-        }, 7500);
+        function scheduleNext() {
+          // 6-8s on "paid", 3-4s on "seen"
+          var delay = currentIndex === 0
+            ? 6000 + Math.random() * 2000
+            : 3000 + Math.random() * 1000;
+          setTimeout(function() {
+            var from = words[currentIndex];
+            var nextIndex = (currentIndex + 1) % words.length;
+            var to = words[nextIndex];
+            transitionWord(from, to, function() {
+              currentIndex = nextIndex;
+              scheduleNext();
+            });
+          }, delay);
+        }
+        scheduleNext();
       }
     }
   }
