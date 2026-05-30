@@ -189,6 +189,23 @@ function initGSAP() {
     });
   }
 
+  // Scroll-animated heading underlines (homepage only)
+  if (document.querySelector('[data-barba-namespace="home"]')) {
+    document.querySelectorAll('.section-title').forEach(function(title) {
+      title.classList.add('section-title--animated');
+
+      ScrollTrigger.create({
+        trigger: title,
+        start: 'top 78%',
+        end: 'top 45%',
+        scrub: 0.3,
+        onUpdate: function(self) {
+          title.style.setProperty('--ul-scale', self.progress);
+        },
+      });
+    });
+  }
+
   // Section entrance animations
   const sections = document.querySelectorAll(
     '.founder, .services-overview, .stats-strip, .featured-work, .cta-banner, .service-detail, .contact-section, .portfolio-section'

@@ -148,6 +148,23 @@ section {
   letter-spacing: -0.03em;
   line-height: 1.1;
   margin-top: var(--space-md);
+  position: relative;
+  display: inline-block;
+}
+
+/* Scroll-animated underline (homepage only) */
+.section-title--animated::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  height: 2px;
+  width: 140%;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary) 55%, transparent 100%);
+  transform: scaleX(var(--ul-scale, 0));
+  transform-origin: left center;
+  will-change: transform;
+}
   margin-bottom: var(--space-2xl);
 }
 
