@@ -196,8 +196,8 @@ function initGSAP() {
 
       ScrollTrigger.create({
         trigger: title,
-        start: 'top 78%',
-        end: 'top 45%',
+        start: 'top 85%',
+        end: 'top 60%',
         scrub: 0.3,
         onUpdate: function(self) {
           title.style.setProperty('--ul-scale', self.progress);
@@ -210,9 +210,12 @@ function initGSAP() {
       var finalWord = el.getAttribute('data-final') || el.textContent;
       var hasPlayed = false;
 
+      // Set to "0" immediately so the word doesn't flash before animating
+      el.textContent = '0';
+
       ScrollTrigger.create({
         trigger: el,
-        start: 'top 82%',
+        start: 'top 85%',
         once: true,
         onEnter: function() {
           if (hasPlayed) return;
