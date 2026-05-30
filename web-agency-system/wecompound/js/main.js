@@ -204,6 +204,53 @@ function initGSAP() {
         },
       });
     });
+
+    // "compound" word counter animation — fires once on scroll
+    document.querySelectorAll('.compound-counter').forEach(function(el) {
+      var finalWord = el.getAttribute('data-final') || el.textContent;
+      var hasPlayed = false;
+
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 82%',
+        once: true,
+        onEnter: function() {
+          if (hasPlayed) return;
+          hasPlayed = true;
+
+          // Phase A: 0→10 over 400ms (visible ramp)
+          // Phase B: 10→999,999 over 600ms (explosive)
+          var phaseA = 400;
+          var phaseB = 600;
+          var start = performance.now();
+          var lastDisplay = -1;
+
+          function tick(now) {
+            var elapsed = now - start;
+            var value;
+
+            if (elapsed < phaseA) {
+              var p = elapsed / phaseA;
+              value = Math.max(0, Math.floor(10 * Math.pow(p, 2)));
+            } else if (elapsed < phaseA + phaseB) {
+              var p = (elapsed - phaseA) / phaseB;
+              value = Math.floor(10 + 999989 * Math.pow(p, 4));
+            } else {
+              el.textContent = finalWord;
+              return;
+            }
+
+            if (value !== lastDisplay) {
+              el.textContent = value.toLocaleString();
+              lastDisplay = value;
+            }
+            requestAnimationFrame(tick);
+          }
+
+          requestAnimationFrame(tick);
+        },
+      });
+    });
   }
 
   // Section entrance animations

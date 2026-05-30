@@ -152,6 +152,12 @@ section {
   display: inline-block;
 }
 
+/* Compound counter word animation */
+.compound-counter {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
 /* Scroll-animated underline (homepage only) */
 .section-title--animated::after {
   content: '';
