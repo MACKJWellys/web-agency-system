@@ -229,6 +229,13 @@ function initGSAP() {
           })(p);
         }
 
+        // Green for "seen", default for "paid"
+        if (toWord === 'seen') {
+          paidEl.style.color = 'var(--primary)';
+        } else {
+          paidEl.style.color = '';
+        }
+
         var renderInterval = setInterval(function() {
           var allDone = locked[0] && locked[1] && locked[2] && locked[3];
           if (allDone) {
@@ -247,61 +254,48 @@ function initGSAP() {
         }, scrambleSpeed);
       }
 
-      // Phase 1: Build up €£$¥ one symbol at a time (wave-write effect)
-      // Phase 2: Brief hold on €£$¥
-      // Phase 3: Resolve €£$¥ → "paid." with rolling wave
+      // Unified wave: build €£$¥ while resolving to "paid" — overlapping
+      // When 3rd symbol ($) appears, 1st position (€) starts resolving to P, etc.
       setTimeout(function() {
-        var targetSymbols = '€£$¥';
-        var built = 1; // € already showing
-        var ticksSinceLastLock = 0;
-        var scrambleTicksPerSymbol = 4; // ~240ms scramble before each lock
-        var phase = 'build';
-        var holdTicks = 0;
-        var resolveElapsed = 0;
-        var resolveLockedCount = 0;
+        var tgtSym = ['€','£','$','¥'];
+        var tgtLtr = ['p','a','i','d'];
+        var S = 4; // ticks per stagger step
 
-        var mainLoop = setInterval(function() {
-          if (phase === 'build') {
-            ticksSinceLastLock++;
-            if (ticksSinceLastLock >= scrambleTicksPerSymbol) {
-              built++;
-              ticksSinceLastLock = 0;
-              if (built >= 4) {
-                paidEl.textContent = targetSymbols;
-                phase = 'hold';
-                return;
-              }
-            }
-            // Render: locked symbols + scrambling next position
-            var display = targetSymbols.substring(0, built);
-            display += symbols[Math.floor(Math.random() * symbols.length)];
-            paidEl.textContent = display;
+        // Timeline per position: [buildStart, buildLock, resolveStart, resolveLock]
+        var timeline = [
+          { bs: -99, bl: -99, rs: 1*S, rl: 2*S }, // pos 0: € already visible
+          { bs: 0,   bl: 1*S, rs: 2*S, rl: 3*S }, // pos 1: £
+          { bs: 1*S, bl: 2*S, rs: 3*S, rl: 4*S }, // pos 2: $
+          { bs: 2*S, bl: 3*S, rs: 4*S, rl: 5*S }, // pos 3: ¥
+        ];
+        var totalTicks = 5 * S;
+        var tick = 0;
 
-          } else if (phase === 'hold') {
-            holdTicks++;
-            if (holdTicks >= 8) { // ~480ms hold on full €£$¥
-              phase = 'resolve';
-            }
-
-          } else if (phase === 'resolve') {
-            resolveElapsed += scrambleSpeed;
-            if (resolveElapsed >= 200 + resolveLockedCount * 250 && resolveLockedCount < 4) {
-              resolveLockedCount++;
-            }
-            if (resolveLockedCount >= 4) {
-              clearInterval(mainLoop);
-              paidEl.textContent = 'paid.';
-              paidEl.style.letterSpacing = '';
-              startRotation();
-              return;
-            }
-            // Locked letters of "paid" + scrambling remainder
-            var display = 'paid'.substring(0, resolveLockedCount);
-            for (var j = resolveLockedCount; j < 4; j++) {
-              display += symbols[Math.floor(Math.random() * symbols.length)];
-            }
-            paidEl.textContent = display;
+        var anim = setInterval(function() {
+          tick++;
+          if (tick >= totalTicks) {
+            clearInterval(anim);
+            paidEl.textContent = 'paid.';
+            paidEl.style.letterSpacing = '';
+            startRotation();
+            return;
           }
+          var display = '';
+          for (var i = 0; i < 4; i++) {
+            var t = timeline[i];
+            if (tick >= t.rl) {
+              display += tgtLtr[i];
+            } else if (tick >= t.rs) {
+              display += symbols[Math.floor(Math.random() * symbols.length)];
+            } else if (tick >= t.bl) {
+              display += tgtSym[i];
+            } else if (tick >= t.bs && tick < t.bl) {
+              display += symbols[Math.floor(Math.random() * symbols.length)];
+            } else if (i === 0) {
+              display += '€';
+            }
+          }
+          paidEl.textContent = display;
         }, scrambleSpeed);
       }, 2400); // ~0.65s hero reveal + 1.75s linger
 
