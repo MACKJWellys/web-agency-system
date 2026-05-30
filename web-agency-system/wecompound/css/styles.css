@@ -149,7 +149,7 @@ section {
   line-height: 1.1;
   margin-top: var(--space-md);
   position: relative;
-  display: inline-block;
+  width: fit-content;
 }
 
 /* Compound counter word animation */
