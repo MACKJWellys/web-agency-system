@@ -190,7 +190,7 @@ function initGSAP() {
     // "paid" currency scramble — fast blitz then snap to "paid."
     var paidEl = document.querySelector('.hero-paid');
     if (paidEl) {
-      var symbols = ['€','£','$','¥','₩','₿','₹','₽','¢','₣'];
+      var symbols = ['€','£','$','¥'];
       var blitzInterval = 60;  // ms per swap — very fast
       var blitzDuration = 1000; // total blitz time
 
