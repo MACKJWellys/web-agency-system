@@ -229,17 +229,17 @@ function initGSAP() {
           })(p);
         }
 
-        var isGreen = (toWord === 'seen');
+        var toGreen = (toWord === 'seen');
+        var fromGreen = (fromWord === 'seen');
 
         var renderInterval = setInterval(function() {
           var allDone = locked[0] && locked[1] && locked[2] && locked[3];
           if (allDone) {
             clearInterval(renderInterval);
-            if (isGreen) {
-              paidEl.innerHTML = '<span style="color:var(--primary)">' + toWord + '</span>.';
+            if (toGreen) {
+              paidEl.innerHTML = '<span style="color:var(--primary)">' + toWord + '.</span>';
             } else {
               paidEl.textContent = toWord + '.';
-              paidEl.style.color = '';
             }
             if (onComplete) onComplete();
             return;
@@ -249,11 +249,13 @@ function initGSAP() {
             var ch;
             if (locked[i]) {
               ch = toWord[i];
-              if (isGreen) ch = '<span style="color:var(--primary)">' + ch + '</span>';
+              if (toGreen) ch = '<span style="color:var(--primary)">' + ch + '</span>';
             } else if (scrambling[i]) {
               ch = symbols[Math.floor(Math.random() * symbols.length)];
             } else {
+              // Still showing old letter — keep green if from "seen"
               ch = state[i];
+              if (fromGreen) ch = '<span style="color:var(--primary)">' + ch + '</span>';
             }
             display += ch;
           }
