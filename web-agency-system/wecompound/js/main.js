@@ -256,16 +256,23 @@ function initGSAP() {
     });
 
     // Fade-out sections as they scroll off the top (homepage only)
-    var fadeSections = document.querySelectorAll('.hero, .founder, .services-overview, .stats-strip, .featured-work');
-    fadeSections.forEach(function(section) {
+    var fadeSections = [
+      { sel: '.hero', start: 'bottom 25%', end: 'bottom 10%' },
+      { sel: '.founder', start: 'bottom 45%', end: 'bottom 25%' },
+      { sel: '.services-overview', start: 'bottom 25%', end: 'bottom 10%' },
+      { sel: '.stats-strip', start: 'bottom 25%', end: 'bottom 10%' },
+      { sel: '.featured-work', start: 'bottom 25%', end: 'bottom 10%' },
+    ];
+    fadeSections.forEach(function(cfg) {
+      var section = document.querySelector(cfg.sel);
+      if (!section) return;
       ScrollTrigger.create({
         trigger: section,
-        start: 'bottom 30%',
-        end: 'bottom top',
-        scrub: 0.2,
+        start: cfg.start,
+        end: cfg.end,
+        scrub: 0.15,
         onUpdate: function(self) {
-          var opacity = 1 - self.progress;
-          section.style.opacity = opacity;
+          section.style.opacity = 1 - self.progress;
         },
         onLeaveBack: function() {
           section.style.opacity = 1;
