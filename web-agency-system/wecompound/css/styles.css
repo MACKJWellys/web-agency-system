@@ -153,6 +153,12 @@ section {
   width: fit-content;
 }
 
+/* Hero "paid" currency scramble */
+.hero-paid {
+  display: inline-block;
+  min-width: 2ch;
+}
+
 /* Compound counter word animation */
 .compound-counter {
   display: inline-block;
