@@ -190,8 +190,8 @@ section {
   gap: var(--space-md);
 }
 .mini-chart {
-  width: clamp(60px, 8vw, 90px);
-  height: clamp(30px, 4vw, 45px);
+  width: clamp(44px, 6vw, 60px);
+  height: clamp(40px, 5.5vw, 56px);
   flex-shrink: 0;
   align-self: center;
 }

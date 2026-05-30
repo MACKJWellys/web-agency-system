@@ -318,27 +318,29 @@ function initGSAP() {
       });
     });
 
-    // Mini bar chart animation (scroll-driven)
+    // Mini bar chart animation (scroll-driven, hockey-stick growth)
     var chart = document.querySelector('.mini-chart');
     if (chart) {
       var bars = chart.querySelectorAll('.mini-chart__bar');
-      // Target heights for an upward trend (out of 40 viewBox height)
-      var targets = [10, 14, 12, 20, 18, 32];
+      var vH = 52; // viewBox height
+      // Exponential growth: small, medium, tall, explosive
+      var targets = [8, 14, 26, 48];
 
       ScrollTrigger.create({
         trigger: chart,
-        start: 'top 85%',
-        end: 'top 55%',
-        scrub: 0.3,
+        start: 'top 82%',
+        end: 'top 62%',
+        scrub: 0.2,
         onUpdate: function(self) {
           var p = self.progress;
+          // Apply easeOutBack curve for a satisfying pop
+          var ep = p < 1 ? 1 - Math.pow(1 - p, 3) : 1;
           bars.forEach(function(bar, i) {
-            // Stagger: each bar starts slightly later in the progress
-            var stagger = i * 0.08;
-            var barProgress = Math.max(0, Math.min(1, (p - stagger) / (1 - stagger * (bars.length - 1) / bars.length)));
-            var h = targets[i] * barProgress;
+            var stagger = i * 0.12;
+            var bp = Math.max(0, Math.min(1, (ep - stagger) / (1 - stagger)));
+            var h = targets[i] * bp;
             bar.setAttribute('height', h);
-            bar.setAttribute('y', 40 - h);
+            bar.setAttribute('y', vH - h);
           });
         },
       });
