@@ -247,8 +247,9 @@ function initGSAP() {
         }, scrambleSpeed);
       }
 
-      // Initial reveal: symbols → "paid" (lock in one by one)
+      // Initial reveal: show element then symbols → "paid" (lock in one by one)
       setTimeout(function() {
+        paidEl.style.visibility = 'visible';
         var elapsed = 0;
         var lockedCount = 0;
         var initScramble = setInterval(function() {

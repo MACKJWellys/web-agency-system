@@ -158,6 +158,7 @@ section {
   display: inline-block;
   min-width: 2ch;
   letter-spacing: -0.08em;
+  visibility: hidden;
 }
 
 /* Compound counter word animation */
