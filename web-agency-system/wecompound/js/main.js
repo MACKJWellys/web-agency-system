@@ -29,6 +29,13 @@ function initPreloader() {
 
 function runCounterAnimation(preloader, counter) {
   var cursor = preloader.querySelector('.preloader__cursor');
+  var typed = preloader.querySelector('.preloader__typed');
+
+  // Type "W" then "e" during cursor blink phase
+  if (typed) {
+    setTimeout(function() { typed.textContent = 'W'; }, 300);
+    setTimeout(function() { typed.textContent = 'We'; }, 600);
+  }
 
   // 2 cursor blinks (1s) + 0.5s hold with cursor visible, then start counting
   if (cursor) {
@@ -254,7 +261,7 @@ function initGSAP() {
           }
           paidEl.textContent = display;
         }, scrambleSpeed);
-      }, 3150);
+      }, 2400); // ~0.65s hero reveal + 1.75s linger
 
       function startRotation() {
         var currentIndex = 0; // currently showing words[0] = "paid"
@@ -265,7 +272,7 @@ function initGSAP() {
           transitionWord(from, to, function() {
             currentIndex = nextIndex;
           });
-        }, 4500);
+        }, 7500);
       }
     }
   }
