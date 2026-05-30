@@ -219,7 +219,7 @@ function initGSAP() {
           }
           paidEl.textContent = display;
         }, blitzInterval);
-      }, 1150);
+      }, 3150); // ~0.65s hero reveal + 2.5s linger
     }
   }
 
