@@ -383,23 +383,19 @@ section {
 .card.is-drawn .card__deco-line {
   transition: stroke-dashoffset 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease;
 }
-/* Stagger the text lines */
+/* Stagger code text lines (Web Design card — 7 lines) */
 .card.is-drawn .card__deco-text:nth-child(1) { transition-delay: 0s; }
-.card.is-drawn .card__deco-text:nth-child(2) { transition-delay: 0.15s; }
-.card.is-drawn .card__deco-text:nth-child(3) { transition-delay: 0.3s; }
-.card.is-drawn .card__deco-text:nth-child(4) { transition-delay: 0.45s; }
-/* Stagger net lines */
-.card.is-drawn .card__deco-line--net:nth-of-type(1) { transition-delay: 0s; }
-.card.is-drawn .card__deco-line--net:nth-of-type(2) { transition-delay: 0.1s; }
-.card.is-drawn .card__deco-line--net:nth-of-type(3) { transition-delay: 0.2s; }
-.card.is-drawn .card__deco-line--net:nth-of-type(4) { transition-delay: 0.3s; }
-.card.is-drawn .card__deco-line--net:nth-of-type(5) { transition-delay: 0.4s; }
-.card.is-drawn .card__deco-line--net:nth-of-type(6) { transition-delay: 0.5s; }
-.card.is-drawn .card__deco-dot:nth-of-type(7) { transition-delay: 0.2s; }
-.card.is-drawn .card__deco-dot:nth-of-type(8) { transition-delay: 0.3s; }
-.card.is-drawn .card__deco-dot:nth-of-type(9) { transition-delay: 0.4s; }
-.card.is-drawn .card__deco-dot:nth-of-type(10) { transition-delay: 0.5s; }
-.card.is-drawn .card__deco-dot:nth-of-type(11) { transition-delay: 0.6s; }
+.card.is-drawn .card__deco-text:nth-child(2) { transition-delay: 0.1s; }
+.card.is-drawn .card__deco-text:nth-child(3) { transition-delay: 0.2s; }
+.card.is-drawn .card__deco-text:nth-child(4) { transition-delay: 0.3s; }
+.card.is-drawn .card__deco-text:nth-child(5) { transition-delay: 0.4s; }
+.card.is-drawn .card__deco-text:nth-child(6) { transition-delay: 0.5s; }
+.card.is-drawn .card__deco-text:nth-child(7) { transition-delay: 0.6s; }
+/* Stagger neural net connections then nodes */
+.card.is-drawn .card__deco-line--net { transition-delay: 0s; }
+.card.is-drawn .card__deco-dot { transition-delay: 0.6s; }
+/* Stagger media collage frames */
+.card.is-drawn .card__deco-line--frame { transition-delay: 0s; }
 /* Card content above deco */
 .card__icon, .card__title, .card__desc {
   position: relative;
