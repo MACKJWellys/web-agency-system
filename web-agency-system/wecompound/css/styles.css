@@ -183,6 +183,22 @@ section {
   margin-bottom: var(--space-2xl);
 }
 
+/* Mini bar chart next to "Results" heading */
+.section-title--chart {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-md);
+}
+.mini-chart {
+  width: clamp(60px, 8vw, 90px);
+  height: clamp(30px, 4vw, 45px);
+  flex-shrink: 0;
+  align-self: center;
+}
+.mini-chart__bar {
+  fill: var(--primary);
+}
+
 /* ------------------------------------------------------------
    4. Buttons
    ------------------------------------------------------------ */

@@ -300,9 +300,11 @@ function initGSAP() {
     });
   }
 
-  // Scroll-animated heading underlines (homepage only)
+  // Scroll-animated heading underlines (homepage only, skip chart heading)
   if (document.querySelector('[data-barba-namespace="home"]')) {
     document.querySelectorAll('.section-title').forEach(function(title) {
+      if (title.classList.contains('section-title--chart')) return; // handled separately
+
       title.classList.add('section-title--animated');
 
       ScrollTrigger.create({
@@ -315,6 +317,32 @@ function initGSAP() {
         },
       });
     });
+
+    // Mini bar chart animation (scroll-driven)
+    var chart = document.querySelector('.mini-chart');
+    if (chart) {
+      var bars = chart.querySelectorAll('.mini-chart__bar');
+      // Target heights for an upward trend (out of 40 viewBox height)
+      var targets = [10, 14, 12, 20, 18, 32];
+
+      ScrollTrigger.create({
+        trigger: chart,
+        start: 'top 85%',
+        end: 'top 55%',
+        scrub: 0.3,
+        onUpdate: function(self) {
+          var p = self.progress;
+          bars.forEach(function(bar, i) {
+            // Stagger: each bar starts slightly later in the progress
+            var stagger = i * 0.08;
+            var barProgress = Math.max(0, Math.min(1, (p - stagger) / (1 - stagger * (bars.length - 1) / bars.length)));
+            var h = targets[i] * barProgress;
+            bar.setAttribute('height', h);
+            bar.setAttribute('y', 40 - h);
+          });
+        },
+      });
+    }
 
     // "compound" word counter animation — fires once on scroll
     document.querySelectorAll('.compound-counter').forEach(function(el) {
