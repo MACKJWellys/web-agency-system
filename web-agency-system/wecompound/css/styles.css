@@ -157,6 +157,7 @@ section {
 .hero-paid {
   display: inline-block;
   min-width: 2ch;
+  vertical-align: top;
 }
 
 /* Compound counter word animation */
@@ -953,6 +954,7 @@ textarea:focus {
 }
 .hero__title .word {
   display: inline-block;
+  vertical-align: top;
 }
 .hero__sub {
   font-size: var(--text-lg);

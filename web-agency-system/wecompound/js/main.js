@@ -262,10 +262,13 @@ function initGSAP() {
         }, scrambleSpeed);
       }
 
-      // Lock width to prevent layout shift during scramble
-      var paidWidth = paidEl.getBoundingClientRect().width;
-      paidEl.style.width = paidWidth + 'px';
-      paidEl.style.overflow = 'hidden';
+      // Lock width on parent .word span to prevent layout shift during scramble
+      var wordSpan = paidEl.closest('.word');
+      if (wordSpan) {
+        var w = wordSpan.getBoundingClientRect().width;
+        wordSpan.style.width = w + 'px';
+        wordSpan.style.overflow = 'hidden';
+      }
 
       // Start rotation after hero reveals
       startRotation();
