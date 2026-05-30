@@ -621,15 +621,22 @@ function initLogoOSpin() {
     }, speed);
   }
 
+  var isFirstCycle = true;
+
   function triggerCycle() {
-    // Spin first 'o'
+    // Always spin first 'o'
     spinO(oSpans[0]);
 
-    // Spin second 'o' 0.5-1s later
-    var secondDelay = 100 + Math.random() * 900;
-    setTimeout(function() {
-      spinO(oSpans[1]);
-    }, secondDelay);
+    // First cycle: always both. After: 33% both, 66% only first.
+    var spinBoth = isFirstCycle || Math.random() < 0.33;
+    if (spinBoth) {
+      var secondDelay = 100 + Math.random() * 900;
+      setTimeout(function() {
+        spinO(oSpans[1]);
+      }, secondDelay);
+    }
+
+    isFirstCycle = false;
 
     // Schedule next cycle: 10-20s from now
     var nextCycle = 10000 + Math.random() * 10000;
