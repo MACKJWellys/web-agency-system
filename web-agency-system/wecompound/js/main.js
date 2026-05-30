@@ -268,9 +268,9 @@ function initGSAP() {
       function startRotation() {
         var currentIndex = 0; // currently showing words[0] = "paid"
         function scheduleNext() {
-          // 6-8s on "paid", 3-4s on "seen"
+          // 5-6s on "paid", 3-4s on "seen"
           var delay = currentIndex === 0
-            ? 6000 + Math.random() * 2000
+            ? 5000 + Math.random() * 1000
             : 3000 + Math.random() * 1000;
           setTimeout(function() {
             var from = words[currentIndex];
