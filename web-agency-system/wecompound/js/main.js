@@ -34,7 +34,7 @@ function runCounterAnimation(preloader, counter) {
   // Type "W" then "e" during cursor blink phase
   if (typed) {
     setTimeout(function() { typed.textContent = 'W'; }, 300);
-    setTimeout(function() { typed.textContent = 'We'; }, 600);
+    setTimeout(function() { typed.textContent = 'We'; }, 750);
   }
 
   // 2 cursor blinks (1s) + 0.5s hold with cursor visible, then start counting
