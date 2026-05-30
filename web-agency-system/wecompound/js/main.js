@@ -187,39 +187,86 @@ function initGSAP() {
       opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', delay: 0.6,
     });
 
-    // "paid" currency scramble — blitz with letters locking in one by one
+    // "paid" / "seen" rotating scramble
     var paidEl = document.querySelector('.hero-paid');
     if (paidEl) {
       var symbols = ['€','£','$','¥'];
-      var target = 'paid';
-      var blitzInterval = 60;
-      var lockInterval = 250; // ms between each letter locking in
-      var initialScramble = 200; // pure scramble before first lock
+      var words = ['paid', 'seen'];
+      var scrambleSpeed = 60;
 
-      setTimeout(function() {
-        var elapsed = 0;
-        var locked = 0; // how many letters of "paid" are locked
-        var scramble = setInterval(function() {
-          elapsed += blitzInterval;
-          // Check if next letter should lock
-          if (elapsed >= initialScramble + locked * lockInterval && locked < target.length) {
-            locked++;
-          }
-          // All locked — done
-          if (locked >= target.length) {
-            clearInterval(scramble);
-            paidEl.textContent = target + '.';
-            paidEl.style.letterSpacing = '';
+      // Rolling wave transition: each letter scrambles then locks to new word,
+      // with the lock trailing 2 positions behind the scramble start
+      function transitionWord(fromWord, toWord, onComplete) {
+        var stepDelay = 200;
+        var lockOffset = 2;
+        var positions = 4;
+        var scrambling = [false, false, false, false];
+        var locked = [false, false, false, false];
+        var state = fromWord.split('');
+
+        for (var p = 0; p < positions; p++) {
+          (function(pos) {
+            setTimeout(function() { scrambling[pos] = true; }, pos * stepDelay);
+            setTimeout(function() {
+              scrambling[pos] = false;
+              locked[pos] = true;
+              state[pos] = toWord[pos];
+            }, (pos + lockOffset) * stepDelay);
+          })(p);
+        }
+
+        var renderInterval = setInterval(function() {
+          var allDone = locked[0] && locked[1] && locked[2] && locked[3];
+          if (allDone) {
+            clearInterval(renderInterval);
+            paidEl.textContent = toWord + '.';
+            if (onComplete) onComplete();
             return;
           }
-          // Build string: locked letters + scrambled remainder
-          var display = target.substring(0, locked);
-          for (var j = locked; j < 4; j++) {
+          var display = '';
+          for (var i = 0; i < positions; i++) {
+            if (locked[i]) display += toWord[i];
+            else if (scrambling[i]) display += symbols[Math.floor(Math.random() * symbols.length)];
+            else display += state[i];
+          }
+          paidEl.textContent = display;
+        }, scrambleSpeed);
+      }
+
+      // Initial reveal: symbols → "paid" (lock in one by one)
+      setTimeout(function() {
+        var elapsed = 0;
+        var lockedCount = 0;
+        var initScramble = setInterval(function() {
+          elapsed += scrambleSpeed;
+          if (elapsed >= 200 + lockedCount * 250 && lockedCount < 4) lockedCount++;
+          if (lockedCount >= 4) {
+            clearInterval(initScramble);
+            paidEl.textContent = 'paid.';
+            paidEl.style.letterSpacing = '';
+            // Start the rotation loop
+            startRotation();
+            return;
+          }
+          var display = 'paid'.substring(0, lockedCount);
+          for (var j = lockedCount; j < 4; j++) {
             display += symbols[Math.floor(Math.random() * symbols.length)];
           }
           paidEl.textContent = display;
-        }, blitzInterval);
-      }, 3150); // ~0.65s hero reveal + 2.5s linger
+        }, scrambleSpeed);
+      }, 3150);
+
+      function startRotation() {
+        var currentIndex = 0; // currently showing words[0] = "paid"
+        setInterval(function() {
+          var from = words[currentIndex];
+          var nextIndex = (currentIndex + 1) % words.length;
+          var to = words[nextIndex];
+          transitionWord(from, to, function() {
+            currentIndex = nextIndex;
+          });
+        }, 4500);
+      }
     }
   }
 
