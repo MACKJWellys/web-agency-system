@@ -293,6 +293,114 @@ section {
   border-left: 2px solid var(--primary);
 }
 
+/* Card decorative SVG backgrounds */
+.card {
+  position: relative;
+  overflow: hidden;
+}
+.card__deco {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 55%;
+  max-width: 200px;
+  height: auto;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+}
+.bento-grid__item--wide .card__deco {
+  width: 35%;
+}
+.card__deco-line {
+  stroke: var(--primary);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: var(--primary);
+}
+.card__deco-line--trend,
+.card__deco-line--net,
+.card__deco-line--frame {
+  fill: none;
+}
+.card__deco-line--trend {
+  stroke-width: 3;
+}
+.card__deco-line--net {
+  stroke-width: 1.5;
+}
+.card__deco-line--frame {
+  stroke-width: 2;
+}
+.card__deco-dot {
+  fill: var(--primary);
+}
+.card__deco-text {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  fill: var(--primary);
+}
+/* Stroke-dash setup for draw-in animation */
+.card__deco-line--trend {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+}
+.card__deco-line--net {
+  stroke-dasharray: 150;
+  stroke-dashoffset: 150;
+}
+.card__deco-line--frame {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+}
+.card__deco-dot {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.card__deco-text {
+  opacity: 0;
+}
+/* Drawn state */
+.card.is-drawn .card__deco-line--trend,
+.card.is-drawn .card__deco-line--net,
+.card.is-drawn .card__deco-line--frame {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.card.is-drawn .card__deco-dot {
+  opacity: 1;
+}
+.card.is-drawn .card__deco-text {
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+.card.is-drawn .card__deco-line {
+  transition: stroke-dashoffset 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease;
+}
+/* Stagger the text lines */
+.card.is-drawn .card__deco-text:nth-child(1) { transition-delay: 0s; }
+.card.is-drawn .card__deco-text:nth-child(2) { transition-delay: 0.15s; }
+.card.is-drawn .card__deco-text:nth-child(3) { transition-delay: 0.3s; }
+.card.is-drawn .card__deco-text:nth-child(4) { transition-delay: 0.45s; }
+/* Stagger net lines */
+.card.is-drawn .card__deco-line--net:nth-of-type(1) { transition-delay: 0s; }
+.card.is-drawn .card__deco-line--net:nth-of-type(2) { transition-delay: 0.1s; }
+.card.is-drawn .card__deco-line--net:nth-of-type(3) { transition-delay: 0.2s; }
+.card.is-drawn .card__deco-line--net:nth-of-type(4) { transition-delay: 0.3s; }
+.card.is-drawn .card__deco-line--net:nth-of-type(5) { transition-delay: 0.4s; }
+.card.is-drawn .card__deco-line--net:nth-of-type(6) { transition-delay: 0.5s; }
+.card.is-drawn .card__deco-dot:nth-of-type(7) { transition-delay: 0.2s; }
+.card.is-drawn .card__deco-dot:nth-of-type(8) { transition-delay: 0.3s; }
+.card.is-drawn .card__deco-dot:nth-of-type(9) { transition-delay: 0.4s; }
+.card.is-drawn .card__deco-dot:nth-of-type(10) { transition-delay: 0.5s; }
+.card.is-drawn .card__deco-dot:nth-of-type(11) { transition-delay: 0.6s; }
+/* Card content above deco */
+.card__icon, .card__title, .card__desc {
+  position: relative;
+  z-index: 1;
+}
+
 .card__icon {
   width: 48px;
   height: 48px;

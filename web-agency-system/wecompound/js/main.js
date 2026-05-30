@@ -346,6 +346,20 @@ function initGSAP() {
       });
     }
 
+    // Bento card SVG draw-in animation
+    document.querySelectorAll('.bento-grid .card').forEach(function(card, i) {
+      ScrollTrigger.create({
+        trigger: card,
+        start: 'top 85%',
+        once: true,
+        onEnter: function() {
+          setTimeout(function() {
+            card.classList.add('is-drawn');
+          }, i * 120); // stagger across cards
+        },
+      });
+    });
+
     // "compound" word counter animation — fires once on scroll
     document.querySelectorAll('.compound-counter').forEach(function(el) {
       var finalWord = el.getAttribute('data-final') || el.textContent;
