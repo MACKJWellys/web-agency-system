@@ -17,8 +17,9 @@
   padding: 0;
 }
 
-html {
+html, body {
   scroll-behavior: auto; /* Lenis handles smooth scroll */
+  overflow-x: hidden;
 }
 
 img {
