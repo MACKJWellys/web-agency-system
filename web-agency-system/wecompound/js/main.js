@@ -247,27 +247,61 @@ function initGSAP() {
         }, scrambleSpeed);
       }
 
-      // Initial reveal: show element then symbols → "paid" (lock in one by one)
+      // Phase 1: Build up €£$¥ one symbol at a time (wave-write effect)
+      // Phase 2: Brief hold on €£$¥
+      // Phase 3: Resolve €£$¥ → "paid." with rolling wave
       setTimeout(function() {
-        paidEl.style.visibility = 'visible';
-        var elapsed = 0;
-        var lockedCount = 0;
-        var initScramble = setInterval(function() {
-          elapsed += scrambleSpeed;
-          if (elapsed >= 200 + lockedCount * 250 && lockedCount < 4) lockedCount++;
-          if (lockedCount >= 4) {
-            clearInterval(initScramble);
-            paidEl.textContent = 'paid.';
-            paidEl.style.letterSpacing = '';
-            // Start the rotation loop
-            startRotation();
-            return;
-          }
-          var display = 'paid'.substring(0, lockedCount);
-          for (var j = lockedCount; j < 4; j++) {
+        var targetSymbols = '€£$¥';
+        var built = 1; // € already showing
+        var ticksSinceLastLock = 0;
+        var scrambleTicksPerSymbol = 4; // ~240ms scramble before each lock
+        var phase = 'build';
+        var holdTicks = 0;
+        var resolveElapsed = 0;
+        var resolveLockedCount = 0;
+
+        var mainLoop = setInterval(function() {
+          if (phase === 'build') {
+            ticksSinceLastLock++;
+            if (ticksSinceLastLock >= scrambleTicksPerSymbol) {
+              built++;
+              ticksSinceLastLock = 0;
+              if (built >= 4) {
+                paidEl.textContent = targetSymbols;
+                phase = 'hold';
+                return;
+              }
+            }
+            // Render: locked symbols + scrambling next position
+            var display = targetSymbols.substring(0, built);
             display += symbols[Math.floor(Math.random() * symbols.length)];
+            paidEl.textContent = display;
+
+          } else if (phase === 'hold') {
+            holdTicks++;
+            if (holdTicks >= 8) { // ~480ms hold on full €£$¥
+              phase = 'resolve';
+            }
+
+          } else if (phase === 'resolve') {
+            resolveElapsed += scrambleSpeed;
+            if (resolveElapsed >= 200 + resolveLockedCount * 250 && resolveLockedCount < 4) {
+              resolveLockedCount++;
+            }
+            if (resolveLockedCount >= 4) {
+              clearInterval(mainLoop);
+              paidEl.textContent = 'paid.';
+              paidEl.style.letterSpacing = '';
+              startRotation();
+              return;
+            }
+            // Locked letters of "paid" + scrambling remainder
+            var display = 'paid'.substring(0, resolveLockedCount);
+            for (var j = resolveLockedCount; j < 4; j++) {
+              display += symbols[Math.floor(Math.random() * symbols.length)];
+            }
+            paidEl.textContent = display;
           }
-          paidEl.textContent = display;
         }, scrambleSpeed);
       }, 2400); // ~0.65s hero reveal + 1.75s linger
 
