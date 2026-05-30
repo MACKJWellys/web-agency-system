@@ -445,6 +445,22 @@ section {
 .card:hover .card__icon {
   filter: drop-shadow(0 0 6px var(--primary));
 }
+.card.is-glowing {
+  transform: translateY(-4px);
+  border-color: var(--hairline-strong);
+}
+.card.is-glowing::after {
+  opacity: 1;
+  box-shadow: 0 0 8px var(--primary);
+}
+.card.is-glowing .card__deco {
+  opacity: 0.25;
+  filter: drop-shadow(0 0 6px var(--primary));
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+.card.is-glowing .card__icon {
+  filter: drop-shadow(0 0 6px var(--primary));
+}
 
 .card__icon svg {
   width: 100%;
@@ -1679,6 +1695,10 @@ textarea:focus {
 
   .bento-grid { grid-template-columns: 1fr; }
   .bento-grid__item--wide { grid-column: span 1; }
+  .mini-chart-group { gap: clamp(4px, 1vw, 8px); }
+  .mini-chart { width: clamp(36px, 8vw, 48px); height: clamp(80px, 18vw, 110px); }
+  .mini-chart--echo[data-echo="3"],
+  .mini-chart--echo[data-echo="4"] { display: none; }
   .work-grid { grid-template-columns: 1fr; }
   .work-card--large { grid-row: span 1; }
   .hero__title { font-size: var(--text-2xl); }
