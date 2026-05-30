@@ -180,28 +180,27 @@ function initGSAP() {
       opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', delay: 0.6,
     });
 
-    // "paid" currency scramble — fires after hero title finishes revealing
+    // "paid" currency scramble
+    // Starts as €£$¥ in HTML. After hero reveals, linger 0.5s, scramble, then "paid"
     var paidEl = document.querySelector('.hero-paid');
     if (paidEl) {
-      var currencySets = ['€£$¥', '$€¥£', '¥$£€', '£¥€$'];
-      var scrambleDelay = 1000; // ms after initGSAP, title is visible by then
-      var cycleDuration = 1500; // total scramble time
-      var cycleCount = currencySets.length;
-      var interval = cycleDuration / cycleCount;
+      var currencySets = ['$€¥£', '¥$£€', '£¥€$'];
+      var cycleDuration = 1200;
+      var interval = cycleDuration / currencySets.length;
 
+      // Hero title last word visible ~0.65s after initGSAP, plus 0.5s linger
       setTimeout(function() {
         var i = 0;
-        paidEl.textContent = currencySets[0];
         var scramble = setInterval(function() {
-          i++;
-          if (i >= cycleCount) {
+          if (i >= currencySets.length) {
             clearInterval(scramble);
             paidEl.textContent = 'paid';
             return;
           }
           paidEl.textContent = currencySets[i];
+          i++;
         }, interval);
-      }, scrambleDelay);
+      }, 1150); // ~0.65s hero reveal + 0.5s linger
     }
   }
 
