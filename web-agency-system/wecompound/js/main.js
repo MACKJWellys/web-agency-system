@@ -254,6 +254,24 @@ function initGSAP() {
         },
       });
     });
+
+    // Fade-out sections as they scroll off the top (homepage only)
+    var fadeSections = document.querySelectorAll('.hero, .founder, .services-overview, .stats-strip, .featured-work');
+    fadeSections.forEach(function(section) {
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'bottom 30%',
+        end: 'bottom top',
+        scrub: 0.2,
+        onUpdate: function(self) {
+          var opacity = 1 - self.progress;
+          section.style.opacity = opacity;
+        },
+        onLeaveBack: function() {
+          section.style.opacity = 1;
+        },
+      });
+    });
   }
 
   // Section entrance animations
