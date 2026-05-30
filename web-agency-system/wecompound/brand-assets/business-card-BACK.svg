@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 650" width="1050" height="650">
+  <defs>
+    <linearGradient id="bgb" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0b0d"/>
+      <stop offset="100%" stop-color="#010102"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1050" height="650" fill="url(#bgb)"/>
+
+  <!-- Top-left: small logo mark -->
+  <text x="70" y="90" font-family="'Outfit', 'Segoe UI', sans-serif" font-weight="700" font-size="28" letter-spacing="-0.5">
+    <tspan fill="#f7f8f8">We</tspan><tspan fill="#22c55e">Compound</tspan>
+  </text>
+
+  <!-- Green accent line separator -->
+  <line x1="70" y1="115" x2="180" y2="115" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Name -->
+  <text x="70" y="220" font-family="'Outfit', 'Segoe UI', sans-serif" font-weight="700" font-size="42" fill="#f7f8f8" letter-spacing="-0.5">Nick</text>
+
+  <!-- Title -->
+  <text x="70" y="260" font-family="'Work Sans', 'Segoe UI', sans-serif" font-weight="400" font-size="18" fill="#22c55e">Founder &amp; Director</text>
+
+  <!-- Contact details -->
+  <!-- Phone -->
+  <g transform="translate(70, 350)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+    </svg>
+    <text x="30" y="14" font-family="'Work Sans', 'Segoe UI', sans-serif" font-weight="400" font-size="17" fill="#d0d6e0">+353 XX XXX XXXX</text>
+  </g>
+
+  <!-- Email -->
+  <g transform="translate(70, 395)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+      <polyline points="22,6 12,13 2,6"/>
+    </svg>
+    <text x="30" y="14" font-family="'Work Sans', 'Segoe UI', sans-serif" font-weight="400" font-size="17" fill="#d0d6e0">hello@wecompound.ie</text>
+  </g>
+
+  <!-- Website -->
+  <g transform="translate(70, 440)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+    </svg>
+    <text x="30" y="14" font-family="'Work Sans', 'Segoe UI', sans-serif" font-weight="400" font-size="17" fill="#d0d6e0">wecompound.ie</text>
+  </g>
+
+  <!-- Bottom-right: subtle corner accent -->
+  <line x1="990" y1="590" x2="930" y2="590" stroke="#22c55e" stroke-width="1.5" opacity="0.4"/>
+  <line x1="990" y1="590" x2="990" y2="530" stroke="#22c55e" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- QR code placeholder area (bottom right) -->
+  <rect x="830" y="430" width="150" height="150" rx="8" fill="#141516" stroke="#23252a" stroke-width="1"/>
+  <text x="905" y="500" font-family="'Work Sans', 'Segoe UI', sans-serif" font-weight="400" font-size="11" fill="#62666d" text-anchor="middle">QR CODE</text>
+  <text x="905" y="518" font-family="'Work Sans', 'Segoe UI', sans-serif" font-weight="400" font-size="11" fill="#62666d" text-anchor="middle">wecompound.ie</text>
+</svg>
